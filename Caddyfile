@@ -1,0 +1,70 @@
+# Caddyfile - 前端靜態文件服務 + 後端 API 反向代理
+
+{
+    # 全域配置
+    auto_https off  # Zeabur 負責 HTTPS 終端
+}
+
+# 默認網站配置
+:80 {
+    # 設置根目錄為構建輸出目錄
+    root * /srv
+
+    # API 代理 - 將 /api/* 請求轉發到後端內網
+    handle_path /api/* {
+        # 反向代理到後端
+        reverse_proxy http://backend.zeabur.internal:8080 {
+            # 添加必要的標頭
+            header_up Host {http.reverse_proxy.upstream.hostport}
+            header_up X-Real-IP {http.request.remote.host}
+            header_up X-Forwarded-For {http.request.remote.host}
+            header_up X-Forwarded-Proto {http.request.scheme}
+            
+            # 超時設定
+            fail_timeout 30s
+        }
+    }
+
+    # 健康檢查代理
+    handle_path /health {
+        reverse_proxy http://backend.zeabur.internal:8080 {
+            header_up Host {http.reverse_proxy.upstream.hostport}
+            header_up X-Real-IP {http.request.remote.host}
+            header_up X-Forwarded-For {http.request.remote.host}
+            header_up X-Forwarded-Proto {http.request.scheme}
+        }
+    }
+
+    # 靜態文件服務（前端）
+    handle {
+        # 嘗試服務文件，如果找不到則返回 index.html（SPA 路由）
+        try_files {path} /index.html
+        file_server
+        
+        # 靜態資產緩存
+        @static {
+            path *.js *.css *.png *.jpg *.jpeg *.gif *.ico *.svg *.woff *.woff2
+        }
+        header @static Cache-Control max-age=31536000
+    }
+
+    # 安全標頭
+    header {
+        # 防止點擊劫持
+        X-Frame-Options DENY
+        # 防止 MIME 類型混淆攻擊
+        X-Content-Type-Options nosniff
+        # XSS 保護
+        X-XSS-Protection "1; mode=block"
+        # 推薦只通過 HTTPS 加載
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        # 控制瀏覽器功能
+        Permissions-Policy "camera=(), microphone=(), geolocation=()"
+    }
+
+    # 日誌配置
+    log {
+        output stdout
+        format console
+    }
+}

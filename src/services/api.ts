@@ -11,7 +11,10 @@ class APIService {
   private timeout: number;
 
   constructor() {
-    this.baseURL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api/v1';
+    // 使用相對路徑，讓 Caddy 代理轉發到後端
+    // 在生產環境中，請求會發送到 https://texttt.zeabur.app/api/v1/*
+    // Caddy 會將其代理到 http://backend.zeabur.internal:8080/api/v1/*
+    this.baseURL = import.meta.env.VITE_API_BASE_URL || '/api/v1';
     this.timeout = 30000; // 30 seconds
   }
 
