@@ -5,7 +5,7 @@
 # ===============================
 
 # 階段 1: 構建階段
-FROM node:18-alpine as builder
+FROM node:20-alpine as builder
 
 # 設置工作目錄
 WORKDIR /app
@@ -13,8 +13,8 @@ WORKDIR /app
 # 複製 package 文件
 COPY package.json package-lock.json ./
 
-# 安裝依賴 (使用 npm ci 確保一致性)
-RUN npm ci --only=production
+# 安裝依賴 (包含開發依賴，構建時需要)
+RUN npm ci
 
 # 複製源代碼
 COPY . .
