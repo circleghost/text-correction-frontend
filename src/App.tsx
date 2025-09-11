@@ -1,7 +1,6 @@
-import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import Home from '@/pages/Home';
-import { config, validateConfig } from '@/utils/config';
+import { validateConfig } from '@/utils/config';
 
 function App() {
   // Validate configuration on app startup

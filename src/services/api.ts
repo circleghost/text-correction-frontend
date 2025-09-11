@@ -4,7 +4,6 @@ import type {
   TextProcessingResult,
   BatchProcessingResult,
   GoogleDocsImport,
-  TextCorrection,
 } from '@/types';
 
 class APIService {
