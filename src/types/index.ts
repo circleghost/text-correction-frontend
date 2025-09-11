@@ -116,6 +116,9 @@ export interface AppState {
   
   // Error state
   error: string | null;
+  
+  // Request cancellation
+  currentAbortController: AbortController | null;
 }
 
 // Component props types

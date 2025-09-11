@@ -20,6 +20,7 @@ interface TextCorrectionStore extends AppState {
   processWithGoogleDocs: () => Promise<void>;
   processDirectText: () => Promise<void>;
   resetState: () => void;
+  cancelProcessing: () => void;
   
   // Paragraph management
   updateParagraphStatus: (id: string, status: Paragraph['status']) => void;
@@ -42,6 +43,7 @@ const initialState: AppState = {
   showAnimation: true,
   animationSpeed: 80, // ms per character
   error: null,
+  currentAbortController: null,
 };
 
 export const useTextCorrectionStore = create<TextCorrectionStore>()(
@@ -59,20 +61,45 @@ export const useTextCorrectionStore = create<TextCorrectionStore>()(
       clearError: () => set({ error: null }),
 
       // Reset state
-      resetState: () => set(initialState),
+      resetState: () => {
+        const state = get();
+        // Cancel any ongoing requests
+        if (state.currentAbortController) {
+          state.currentAbortController.abort();
+        }
+        set(initialState);
+      },
+
+      // Cancel current processing
+      cancelProcessing: () => {
+        const state = get();
+        if (state.currentAbortController) {
+          state.currentAbortController.abort();
+        }
+        set({
+          isProcessing: false,
+          processingProgress: 0,
+          currentAbortController: null,
+          error: 'Processing cancelled by user'
+        });
+      },
 
       // Main processing function
       startProcessing: async () => {
-        console.group(`%c🎯 Starting Text Processing`, 'color: #9C27B0; font-weight: bold;');
         const state = get();
-        console.log('📊 Current State:', {
-          inputMethod: state.inputMethod,
-          inputTextLength: state.inputText.length,
-          googleDocsUrl: state.googleDocsUrl,
-          isProcessing: state.isProcessing,
-        });
         
-        set({ error: null });
+        // Cancel any existing request
+        if (state.currentAbortController) {
+          state.currentAbortController.abort();
+        }
+        
+        // Create new AbortController for this request
+        const abortController = new AbortController();
+        
+        set({ 
+          error: null,
+          currentAbortController: abortController 
+        });
 
         try {
           if (state.inputMethod === 'google-docs') {
@@ -84,15 +111,18 @@ export const useTextCorrectionStore = create<TextCorrectionStore>()(
           }
           console.log('✅ Processing completed successfully');
         } catch (error) {
-          console.error('❌ Processing failed:', error);
+          // Don't set error if request was cancelled
+          if (error instanceof Error && error.name === 'AbortError') {
+            return;
+          }
+          
           const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
           set({
             error: errorMessage,
             isProcessing: false,
             processingProgress: 0,
+            currentAbortController: null,
           });
-        } finally {
-          console.groupEnd();
         }
       },
 
@@ -262,6 +292,7 @@ export const useTextCorrectionStore = create<TextCorrectionStore>()(
             isCompleted: true,
             isProcessing: false,
             processingProgress: 100,
+            currentAbortController: null,
           });
           console.log('✅ Final state: completed=true, processing=false, progress=100%');
 
