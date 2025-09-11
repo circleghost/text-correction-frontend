@@ -39,20 +39,12 @@ COPY --from=builder /app/dist /srv
 # 複製 Caddyfile
 COPY Caddyfile /etc/caddy/Caddyfile
 
-# 創建 Caddy 用戶的數據目錄
-RUN mkdir -p /data/caddy && \
-    chown -R caddy:caddy /data/caddy && \
-    chown -R caddy:caddy /srv
-
 # 健康檢查
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD curl -f http://localhost/ || exit 1
 
 # 暴露端口
 EXPOSE 80
-
-# 設置用戶
-USER caddy
 
 # 啟動 Caddy
 CMD ["caddy", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile"]
