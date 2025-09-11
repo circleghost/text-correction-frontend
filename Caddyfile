@@ -17,11 +17,6 @@
             # 添加必要的標頭
             header_up Host {http.reverse_proxy.upstream.hostport}
             header_up X-Real-IP {http.request.remote.host}
-            header_up X-Forwarded-For {http.request.remote.host}
-            header_up X-Forwarded-Proto {http.request.scheme}
-            
-            # 超時設定
-            fail_timeout 30s
         }
     }
 
@@ -30,8 +25,6 @@
         reverse_proxy http://backend.zeabur.internal:8080 {
             header_up Host {http.reverse_proxy.upstream.hostport}
             header_up X-Real-IP {http.request.remote.host}
-            header_up X-Forwarded-For {http.request.remote.host}
-            header_up X-Forwarded-Proto {http.request.scheme}
         }
     }
 
