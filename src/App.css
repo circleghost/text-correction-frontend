@@ -1,0 +1,7 @@
+/* App-specific styles - Most styles are handled by Tailwind CSS and our custom CSS */
+
+.App {
+  /* Any app-specific styles can be added here */
+}
+
+/* Override or extend Tailwind classes as needed */
