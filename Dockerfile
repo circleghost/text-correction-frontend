@@ -43,8 +43,8 @@ COPY Caddyfile /etc/caddy/Caddyfile
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD curl -f http://localhost/ || exit 1
 
-# 暴露端口
-EXPOSE 80
+# 暴露端口（支援環境變數）
+EXPOSE ${PORT:-80}
 
 # 啟動 Caddy
 CMD ["caddy", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile"]

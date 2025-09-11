@@ -5,8 +5,8 @@
     auto_https off  # Zeabur 負責 HTTPS 終端
 }
 
-# 默認網站配置
-:80 {
+# 默認網站配置（支援環境變數指定端口）
+:{$PORT:80} {
     # 設置根目錄為構建輸出目錄
     root * /srv
 
@@ -28,17 +28,41 @@
         }
     }
 
+    # 測試端點 - 確保 Caddy 基本運作
+    handle /test {
+        respond "Caddy is working! Time: {time.now}" 200
+    }
+
     # 靜態文件服務（前端）
     handle {
         # 嘗試服務文件，如果找不到則返回 index.html（SPA 路由）
         try_files {path} /index.html
-        file_server
+        file_server {
+            # 如果找不到文件，顯示詳細錯誤
+            browse
+        }
         
         # 靜態資產緩存
         @static {
             path *.js *.css *.png *.jpg *.jpeg *.gif *.ico *.svg *.woff *.woff2
         }
         header @static Cache-Control max-age=31536000
+    }
+
+    # 錯誤處理
+    handle_errors {
+        @502 expression {http.error.status_code} == 502
+        handle @502 {
+            respond "502 Bad Gateway: Unable to connect to backend at http://backend.zeabur.internal:8080" 502
+        }
+        
+        @404 expression {http.error.status_code} == 404
+        handle @404 {
+            respond "404 Not Found: File not found in /srv directory. Contents: {file.exists /srv}" 404
+        }
+
+        # 其他錯誤
+        respond "Error {http.error.status_code}: {http.error.status_text}" {http.error.status_code}
     }
 
     # 安全標頭
