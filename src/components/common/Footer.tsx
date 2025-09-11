@@ -9,15 +9,15 @@ export const Footer: React.FC<FooterProps> = ({ className = '' }) => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className={`bg-neutral-50 border-t border-neutral-200 ${className}`}>
-      <div className='max-w-6xl mx-auto px-4 py-8'>
+    <footer className={`bg-[#0a0e1a] border-t border-[#00D4FF] neon-border ${className}`}>
+      <div className='max-w-6xl mx-auto' style={{padding: '2rem 1rem'}}>
         <div className='grid grid-cols-1 md:grid-cols-3 gap-8'>
           {/* App Info */}
           <div>
-            <h3 className='text-lg font-semibold text-text-primary mb-3'>
+            <h3 className='text-lg font-semibold text-[#FFFFFF] mb-3'>
               {config.appName}
             </h3>
-            <p className='text-sm text-text-secondary mb-4 leading-relaxed'>
+            <p className='text-sm text-[#64748b] mb-4 leading-relaxed'>
               {config.appDescription}
             </p>
             <div className='text-xs text-neutral-500'>
@@ -27,31 +27,31 @@ export const Footer: React.FC<FooterProps> = ({ className = '' }) => {
 
           {/* Features */}
           <div>
-            <h4 className='text-md font-medium text-text-primary mb-3'>
+            <h4 className='text-md font-medium text-[#FFFFFF] tech-subtitle mb-3'>
               核心功能
             </h4>
-            <ul className='space-y-2 text-sm text-text-secondary'>
+            <ul className='space-y-2 text-sm text-[#B0B0B0]'>
               <li className='flex items-center'>
-                <svg className='w-4 h-4 text-primary-500 mr-2' fill='currentColor' viewBox='0 0 20 20'>
+                <svg className='w-4 h-4 text-[#3b82f6] mr-2' fill='currentColor' viewBox='0 0 20 20'>
                   <path fillRule='evenodd' d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z' clipRule='evenodd' />
                 </svg>
                 AI 智能錯字檢測
               </li>
               <li className='flex items-center'>
-                <svg className='w-4 h-4 text-primary-500 mr-2' fill='currentColor' viewBox='0 0 20 20'>
+                <svg className='w-4 h-4 text-[#3b82f6] mr-2' fill='currentColor' viewBox='0 0 20 20'>
                   <path fillRule='evenodd' d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z' clipRule='evenodd' />
                 </svg>
                 段落智能處理
               </li>
               <li className='flex items-center'>
-                <svg className='w-4 h-4 text-primary-500 mr-2' fill='currentColor' viewBox='0 0 20 20'>
+                <svg className='w-4 h-4 text-[#3b82f6] mr-2' fill='currentColor' viewBox='0 0 20 20'>
                   <path fillRule='evenodd' d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z' clipRule='evenodd' />
                 </svg>
                 視覺化對比顯示
               </li>
               {config.enableGoogleDocs && (
                 <li className='flex items-center'>
-                  <svg className='w-4 h-4 text-primary-500 mr-2' fill='currentColor' viewBox='0 0 20 20'>
+                  <svg className='w-4 h-4 text-[#3b82f6] mr-2' fill='currentColor' viewBox='0 0 20 20'>
                     <path fillRule='evenodd' d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z' clipRule='evenodd' />
                   </svg>
                   Google Docs 整合
@@ -62,14 +62,14 @@ export const Footer: React.FC<FooterProps> = ({ className = '' }) => {
 
           {/* Links & Support */}
           <div>
-            <h4 className='text-md font-medium text-text-primary mb-3'>
+            <h4 className='text-md font-medium text-[#FFFFFF] mb-3'>
               支援與說明
             </h4>
-            <ul className='space-y-2 text-sm text-text-secondary'>
+            <ul className='space-y-2 text-sm text-[#64748b]'>
               <li>
                 <a
                   href='#usage-guide'
-                  className='hover:text-primary-600 transition-colors duration-200'
+                  className='hover:text-[#2563eb] transition-colors duration-200'
                 >
                   使用說明
                 </a>
@@ -77,7 +77,7 @@ export const Footer: React.FC<FooterProps> = ({ className = '' }) => {
               <li>
                 <a
                   href='#faq'
-                  className='hover:text-primary-600 transition-colors duration-200'
+                  className='hover:text-[#2563eb] transition-colors duration-200'
                 >
                   常見問題
                 </a>
@@ -85,7 +85,7 @@ export const Footer: React.FC<FooterProps> = ({ className = '' }) => {
               <li>
                 <a
                   href='#privacy'
-                  className='hover:text-primary-600 transition-colors duration-200'
+                  className='hover:text-[#2563eb] transition-colors duration-200'
                 >
                   隱私政策
                 </a>
@@ -93,7 +93,7 @@ export const Footer: React.FC<FooterProps> = ({ className = '' }) => {
               <li>
                 <a
                   href='#contact'
-                  className='hover:text-primary-600 transition-colors duration-200'
+                  className='hover:text-[#2563eb] transition-colors duration-200'
                 >
                   聯絡我們
                 </a>

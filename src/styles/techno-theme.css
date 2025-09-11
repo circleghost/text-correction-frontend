@@ -1,0 +1,2148 @@
+/* ===== TECHNO THEME - GLOBAL STYLES ===== */
+
+:root {
+  /* LinguaCheck 完全匹配配色方案 */
+  --primary-color: #00aaff;
+  --secondary-color: #1a2a3a;
+  --text-primary: #e0e0e0;
+  --text-secondary: #8a9eb3;
+  --background-dark: #0d1117;
+  
+  /* 簡化的特效顏色 */
+  --primary-neon: #00aaff;
+  --secondary-neon: #39FF14;
+  --danger-neon: #ff4757;
+  --warning-neon: #ffa502;
+  
+  /* 背景效果 */
+  --bg-dark: #0d1117;
+  --bg-card: rgba(0, 0, 0, 0.3);
+  --bg-overlay: rgba(0, 0, 0, 0.85);
+  
+  /* 邊框與陰影 - 減少強度 */
+  --border-primary: #1a2a3a;
+  --shadow-primary: 0 0 30px rgba(0, 170, 255, 0.15);
+  --shadow-focus: 0 0 15px rgba(0, 170, 255, 0.3);
+  --shadow-button: 0 0 20px var(--primary-color);
+}
+
+/* ===== GLOWING TEXT ANIMATION ===== */
+.glowing-text {
+  text-shadow: 0 0 5px var(--primary-color), 0 0 10px var(--primary-color), 0 0 15px var(--primary-color);
+  animation: glowing-pulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes glowing-pulse {
+  from {
+    text-shadow: 0 0 5px var(--primary-color), 0 0 10px var(--primary-color), 0 0 15px var(--primary-color);
+  }
+  to {
+    text-shadow: 0 0 10px var(--primary-color), 0 0 20px var(--primary-color), 0 0 30px var(--primary-color);
+  }
+}
+
+/* ===== GLOBAL BASE STYLES ===== */
+* {
+  box-sizing: border-box;
+}
+
+/* 性能優化：啟用硬體加速 */
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: var(--background-dark);
+  color: var(--text-primary);
+  font-family: 'Manrope', 'Noto Sans', sans-serif;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+  /* 硬體加速優化 */
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* 減少動畫對低性能設備的影響 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .typewriter-effect {
+    animation: none;
+    border-right: none;
+  }
+  
+  .lens-flare-tracker,
+  .floating-particles,
+  .particle-explosion-btn::before {
+    display: none !important;
+  }
+}
+
+/* ===== LinguaCheck 簡潔背景網格 ===== */
+.circuit-board {
+  background: 
+    /* 簡單網格線條 - 完全匹配LinguaCheck */
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    /* 深色背景 */
+    var(--background-dark);
+  background-size: 
+    40px 40px,
+    40px 40px,
+    100% 100%;
+  background-position: 
+    0 0,
+    0 0,
+    0 0;
+  position: relative;
+  min-height: 100vh;
+}
+
+.circuit-board::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    /* 簡單漸層覆蓋 - 匹配LinguaCheck */
+    linear-gradient(135deg, rgba(0, 0, 0, 0.6) 0%, transparent 50%, rgba(0, 0, 0, 0.6) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.circuit-board::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 50px,
+      rgba(0, 212, 255, 0.03) 50px,
+      rgba(0, 212, 255, 0.03) 51px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 50px,
+      rgba(57, 255, 20, 0.02) 50px,
+      rgba(57, 255, 20, 0.02) 51px
+    );
+  pointer-events: none;
+  z-index: 0;
+  animation: dataStreamBackground 20s linear infinite;
+}
+
+@keyframes dataStreamBackground {
+  0% { transform: translateX(0) translateY(0); }
+  100% { transform: translateX(50px) translateY(50px); }
+}
+
+/* ===== 電影級動畫關鍵影格 ===== */
+
+/* 矩陣雨流動效果 */
+@keyframes matrixFlow {
+  0% { background-position: 0 0, 0 0, 0 0, 0% 0%, 100% 100%, 0 0; }
+  50% { background-position: 20px 20px, 20px 20px, 50px 50px, 25% 25%, 75% 75%, 0 0; }
+  100% { background-position: 40px 40px, 40px 40px, 100px 100px, 50% 50%, 50% 50%, 0 0; }
+}
+
+/* 全息投影脈衝效果 */
+@keyframes holographicPulse {
+  0%, 100% { 
+    opacity: 0.6; 
+    transform: scale(1);
+    filter: blur(0px) hue-rotate(0deg);
+  }
+  33% { 
+    opacity: 0.8; 
+    transform: scale(1.02);
+    filter: blur(0.5px) hue-rotate(15deg);
+  }
+  66% { 
+    opacity: 0.9; 
+    transform: scale(0.98);
+    filter: blur(0.3px) hue-rotate(-10deg);
+  }
+}
+
+/* 光線追蹤效果 */
+@keyframes lightRayTrace {
+  0% { 
+    opacity: 0;
+    transform: translateX(-100%) rotate(-5deg);
+    box-shadow: 0 0 0 rgba(0, 170, 255, 0);
+  }
+  50% { 
+    opacity: 1;
+    transform: translateX(0%) rotate(0deg);
+    box-shadow: 0 0 30px rgba(0, 170, 255, 0.8);
+  }
+  100% { 
+    opacity: 0;
+    transform: translateX(100%) rotate(5deg);
+    box-shadow: 0 0 0 rgba(0, 170, 255, 0);
+  }
+}
+
+/* 粒子爆炸效果 */
+@keyframes particleExplosion {
+  0% {
+    transform: scale(0) rotate(0deg);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.5) rotate(180deg);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(3) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* 鏡頭光暈跟隨 */
+@keyframes lensFlare {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.3;
+    filter: brightness(1) blur(2px);
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.8;
+    filter: brightness(1.5) blur(0px);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.6;
+    filter: brightness(1.2) blur(1px);
+  }
+}
+
+@keyframes backgroundPulse {
+  0% { opacity: 0.6; }
+  100% { opacity: 1; }
+}
+
+/* ===== GRADIENT OVERLAYS ===== */
+.gradient-overlay {
+  background: linear-gradient(135deg, 
+    rgba(0, 212, 255, 0.15) 0%,
+    transparent 30%,
+    transparent 70%,
+    rgba(57, 255, 20, 0.15) 100%
+  );
+}
+
+.gradient-overlay-dark {
+  background: linear-gradient(135deg, 
+    rgba(0, 0, 0, 0.9) 0%,
+    rgba(10, 14, 26, 0.8) 25%,
+    rgba(10, 14, 26, 0.8) 75%,
+    rgba(0, 0, 0, 0.9) 100%
+  );
+}
+
+/* ===== GLOW EFFECTS ===== */
+.glow-text {
+  text-shadow: 
+    0 0 2px currentColor,
+    0 0 5px currentColor;
+}
+
+.glow-text-primary {
+  color: var(--primary-neon);
+  text-shadow: 
+    0 0 2px var(--primary-neon),
+    0 0 5px rgba(0, 212, 255, 0.5);
+}
+
+.glow-text-secondary {
+  color: var(--secondary-neon);
+  text-shadow: 
+    0 0 2px var(--secondary-neon),
+    0 0 5px rgba(57, 255, 20, 0.5);
+}
+
+.glow-border {
+  box-shadow: 
+    0 0 10px var(--border-glow),
+    inset 0 0 10px rgba(0, 169, 255, 0.1);
+}
+
+.glow-border-strong {
+  box-shadow: 
+    0 0 20px var(--primary-neon),
+    0 0 40px rgba(0, 169, 255, 0.3),
+    inset 0 0 20px rgba(0, 169, 255, 0.1);
+}
+
+/* ===== GLASS MORPHISM ===== */
+.glass {
+  background: var(--bg-glass);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-strong {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 5px var(--primary-neon);
+  }
+  50% {
+    box-shadow: 0 0 20px var(--primary-neon), 0 0 30px rgba(0, 169, 255, 0.5);
+  }
+}
+
+/* 微互動動畫 */
+@keyframes gentle-bounce {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+@keyframes fade-in-up {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scale-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes slide-right {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 1;
+  }
+}
+
+@keyframes data-stream {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes float-up-down {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes matrix-rain {
+  0% {
+    transform: translateY(-100vh);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
+}
+
+@keyframes scan-line {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100vh);
+  }
+}
+
+/* ===== ANIMATION CLASSES ===== */
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.animate-slide-right {
+  animation: slide-right 2s linear infinite;
+}
+
+.animate-data-stream {
+  background: linear-gradient(90deg, 
+    transparent,
+    rgba(0, 169, 255, 0.3),
+    transparent
+  );
+  background-size: 200% 100%;
+  animation: data-stream 3s linear infinite;
+}
+
+.animate-float {
+  animation: float-up-down 3s ease-in-out infinite;
+}
+
+/* 階段式載入動畫 */
+.stagger-animation {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fade-in-up 0.6s ease-out forwards;
+}
+
+.stagger-animation:nth-child(1) { animation-delay: 0.1s; }
+.stagger-animation:nth-child(2) { animation-delay: 0.2s; }
+.stagger-animation:nth-child(3) { animation-delay: 0.3s; }
+.stagger-animation:nth-child(4) { animation-delay: 0.4s; }
+.stagger-animation:nth-child(5) { animation-delay: 0.5s; }
+
+/* 按鈕點擊回饋 */
+.button-feedback {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.button-feedback::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.3s, height 0.3s;
+}
+
+.button-feedback:active {
+  transform: scale(0.98);
+}
+
+.button-feedback:active::after {
+  width: 300px;
+  height: 300px;
+}
+
+/* 惸停效果加強 */
+.button-feedback:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.1);
+}
+
+.animate-matrix-rain {
+  animation: matrix-rain 10s linear infinite;
+}
+
+.animate-scan-line {
+  animation: scan-line 2s linear infinite;
+}
+
+/* ===== NEON EFFECTS ===== */
+.neon-line {
+  position: relative;
+  overflow: hidden;
+}
+
+.neon-line::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, 
+    transparent,
+    var(--primary-neon),
+    transparent
+  );
+  animation: slide-right 3s linear infinite;
+}
+
+.neon-border {
+  border: 1px solid var(--primary-neon);
+  box-shadow: 
+    0 0 5px var(--primary-neon),
+    inset 0 0 5px rgba(0, 169, 255, 0.2);
+}
+
+.neon-border-animated {
+  position: relative;
+  border: 1px solid transparent;
+  background: linear-gradient(var(--bg-dark), var(--bg-dark)) padding-box,
+              linear-gradient(45deg, var(--primary-neon), transparent, var(--secondary-neon)) border-box;
+}
+
+/* ===== INTERACTIVE STATES ===== */
+.hover-glow {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.hover-glow:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: var(--shadow-glow-primary);
+}
+
+.hover-glow::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.5s;
+  pointer-events: none;
+}
+
+.hover-glow:hover::before {
+  left: 100%;
+}
+
+.hover-scale {
+  transition: transform 0.2s ease;
+}
+
+.hover-scale:hover {
+  transform: scale(1.05);
+}
+
+.hover-bright {
+  transition: all 0.3s ease;
+}
+
+.hover-bright:hover {
+  filter: brightness(1.2) saturate(1.1);
+}
+
+/* 新增微互動類別 */
+.gentle-bounce {
+  animation: gentle-bounce 2s ease-in-out infinite;
+}
+
+.fade-in-up {
+  animation: fade-in-up 0.6s ease-out forwards;
+}
+
+.scale-in {
+  animation: scale-in 0.4s ease-out;
+}
+
+.shimmer {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* ===== DATA VISUALIZATION ===== */
+.tech-progress-bar {
+  background: var(--bg-darker);
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+}
+
+.tech-progress-fill {
+  background: linear-gradient(90deg, 
+    var(--primary-neon),
+    var(--secondary-neon)
+  );
+  box-shadow: 0 0 20px rgba(0, 169, 255, 0.8);
+  position: relative;
+  overflow: hidden;
+}
+
+.tech-progress-fill::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  animation: slide-right 2s linear infinite;
+}
+
+/* ===== STATUS INDICATORS ===== */
+.status-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  position: relative;
+}
+
+.status-dot::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  opacity: 0.6;
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.status-dot.success {
+  background: var(--secondary-neon);
+  box-shadow: 0 0 10px var(--secondary-neon);
+}
+
+.status-dot.success::before {
+  background: var(--secondary-neon);
+}
+
+.status-dot.processing {
+  background: var(--primary-neon);
+  box-shadow: 0 0 10px var(--primary-neon);
+  animation: pulse-glow 1s ease-in-out infinite;
+}
+
+.status-dot.processing::before {
+  background: var(--primary-neon);
+}
+
+.status-dot.error {
+  background: var(--danger-neon);
+  box-shadow: 0 0 10px var(--danger-neon);
+}
+
+.status-dot.error::before {
+  background: var(--danger-neon);
+}
+
+/* ===== TYPOGRAPHY ENHANCEMENTS ===== */
+.tech-title {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, 
+    var(--text-highlight),
+    var(--primary-neon)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.tech-subtitle {
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.mono-text {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-weight: 500;
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 768px) {
+  .circuit-board {
+    background-size: 20px 20px;
+  }
+  
+  .glow-text {
+    text-shadow: 
+      0 0 3px currentColor,
+      0 0 6px currentColor;
+  }
+  
+  .animate-data-stream {
+    animation-duration: 2s;
+  }
+}
+
+/* ===== ACCESSIBILITY ===== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ===== UTILITY CLASSES ===== */
+.full-screen-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+.tech-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  position: relative;
+  z-index: 2;
+}
+
+/* 浮動粒子效果 */
+.floating-particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: var(--primary-neon);
+  border-radius: 50%;
+  box-shadow: 0 0 6px var(--primary-neon);
+  animation: float-particle 10s infinite linear;
+  opacity: 0;
+}
+
+.particle:nth-child(odd) {
+  background: var(--secondary-neon);
+  box-shadow: 0 0 6px var(--secondary-neon);
+  animation-duration: 15s;
+  animation-delay: -5s;
+}
+
+@keyframes float-particle {
+  0% {
+    opacity: 0;
+    transform: translateY(100vh) translateX(0) rotate(0deg);
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-100px) translateX(100px) rotate(360deg);
+  }
+}
+
+.tech-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border-primary);
+  border-radius: 12px;
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.tech-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--primary-neon), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tech-card:hover::before {
+  opacity: 1;
+  animation: shimmer 1.5s ease-in-out;
+}
+
+.tech-input {
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--border-primary);
+  color: var(--text-primary);
+  border-radius: 8px;
+  padding: 0.75rem;
+  transition: all 0.3s ease;
+}
+
+.tech-input {
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tech-input:focus {
+  outline: none;
+  border-color: var(--primary-neon);
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+  transform: scale(1.01);
+}
+
+/* 輸入框焦點效果 */
+.input-focus-glow {
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, var(--primary-neon), transparent, var(--secondary-neon));
+  border-radius: 8px;
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.3s ease;
+}
+
+.input-focused .input-focus-glow {
+  opacity: 0.3;
+  animation: rotateGlow 3s linear infinite;
+}
+
+.input-focused .tech-input {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+/* 打字效果 */
+@keyframes typing-indicator {
+  0%, 50% {
+    border-right-color: var(--primary-neon);
+  }
+  51%, 100% {
+    border-right-color: transparent;
+  }
+}
+
+.tech-input:focus::after {
+  content: '';
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2px;
+  height: 20px;
+  background: var(--primary-neon);
+  animation: typing-indicator 1s infinite;
+}
+
+.tech-input::placeholder {
+  color: var(--text-muted);
+}
+
+/* ===== NEON BUTTON COMPONENTS ===== */
+.neon-button {
+  position: relative;
+  font-family: 'Manrope', 'Noto Sans', sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  background-color: transparent;
+  border: 2px solid;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  outline: none;
+}
+
+/* Button Sizes */
+.neon-button--sm {
+  padding: 8px 16px;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
+.neon-button--md {
+  padding: 12px 24px;
+  font-size: 14px;
+}
+
+.neon-button--lg {
+  padding: 16px 32px;
+  font-size: 16px;
+  letter-spacing: 2px;
+}
+
+/* Button Variants */
+.neon-button--primary {
+  color: var(--primary-neon);
+  border-color: var(--primary-neon);
+  text-shadow: 0 0 10px rgba(0, 169, 255, 0.6);
+  box-shadow: 
+    0 0 20px rgba(0, 169, 255, 0.3),
+    inset 0 0 20px rgba(0, 169, 255, 0.1);
+}
+
+.neon-button--secondary {
+  color: var(--secondary-neon);
+  border-color: var(--secondary-neon);
+  text-shadow: 0 0 10px rgba(0, 255, 136, 0.6);
+  box-shadow: 
+    0 0 20px rgba(0, 255, 136, 0.3),
+    inset 0 0 20px rgba(0, 255, 136, 0.1);
+}
+
+.neon-button--success {
+  color: var(--secondary-neon);
+  border-color: var(--secondary-neon);
+  text-shadow: 0 0 10px rgba(0, 255, 136, 0.6);
+  box-shadow: 
+    0 0 20px rgba(0, 255, 136, 0.3),
+    inset 0 0 20px rgba(0, 255, 136, 0.1);
+}
+
+.neon-button--danger {
+  color: var(--danger-neon);
+  border-color: var(--danger-neon);
+  text-shadow: 0 0 10px rgba(255, 0, 85, 0.6);
+  box-shadow: 
+    0 0 20px rgba(255, 0, 85, 0.3),
+    inset 0 0 20px rgba(255, 0, 85, 0.1);
+}
+
+/* Button Types */
+.neon-button--pulse {
+  animation: neonPulse 2s infinite alternate ease-in-out;
+}
+
+.neon-button--scan {
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+  background: rgba(13, 17, 23, 0.8);
+}
+
+.neon-button--glow {
+  position: relative;
+}
+
+/* Button States */
+.neon-button:hover:not(.neon-button--disabled) {
+  transform: translateY(-2px);
+  filter: brightness(1.3);
+}
+
+.neon-button:active:not(.neon-button--disabled) {
+  transform: translateY(0px) scale(0.98);
+}
+
+.neon-button--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: grayscale(50%);
+}
+
+/* Button Text */
+.neon-button__text {
+  position: relative;
+  z-index: 2;
+}
+
+/* Pulse Animation */
+@keyframes neonPulse {
+  0% {
+    filter: brightness(1);
+    box-shadow: 
+      0 0 20px rgba(0, 169, 255, 0.3),
+      inset 0 0 20px rgba(0, 169, 255, 0.1);
+  }
+  100% {
+    filter: brightness(1.4);
+    box-shadow: 
+      0 0 30px rgba(0, 169, 255, 0.6),
+      inset 0 0 30px rgba(0, 169, 255, 0.2);
+  }
+}
+
+.neon-button--secondary.neon-button--pulse {
+  animation: neonPulseSecondary 2s infinite alternate ease-in-out;
+}
+
+@keyframes neonPulseSecondary {
+  0% {
+    filter: brightness(1);
+    box-shadow: 
+      0 0 20px rgba(0, 255, 136, 0.3),
+      inset 0 0 20px rgba(0, 255, 136, 0.1);
+  }
+  100% {
+    filter: brightness(1.4);
+    box-shadow: 
+      0 0 30px rgba(0, 255, 136, 0.6),
+      inset 0 0 30px rgba(0, 255, 136, 0.2);
+  }
+}
+
+.neon-button--danger.neon-button--pulse {
+  animation: neonPulseDanger 2s infinite alternate ease-in-out;
+}
+
+@keyframes neonPulseDanger {
+  0% {
+    filter: brightness(1);
+    box-shadow: 
+      0 0 20px rgba(255, 0, 85, 0.3),
+      inset 0 0 20px rgba(255, 0, 85, 0.1);
+  }
+  100% {
+    filter: brightness(1.4);
+    box-shadow: 
+      0 0 30px rgba(255, 0, 85, 0.6),
+      inset 0 0 30px rgba(255, 0, 85, 0.2);
+  }
+}
+
+/* Scan Line Effect */
+.neon-button__scan-line {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(0, 169, 255, 0.6), 
+    transparent);
+  transition: left 0.5s ease;
+  z-index: 1;
+}
+
+.neon-button--secondary .neon-button__scan-line {
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(0, 255, 136, 0.6), 
+    transparent);
+}
+
+.neon-button--danger .neon-button__scan-line {
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255, 0, 85, 0.6), 
+    transparent);
+}
+
+.neon-button--scan:hover .neon-button__scan-line {
+  left: 100%;
+}
+
+/* Corner Decorations for Scan Button */
+.neon-button__corners {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.corner {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border: 2px solid var(--primary-neon);
+}
+
+.neon-button--secondary .corner {
+  border-color: var(--secondary-neon);
+}
+
+.neon-button--danger .corner {
+  border-color: var(--danger-neon);
+}
+
+.corner--tl {
+  top: -1px;
+  left: -1px;
+  border-right: none;
+  border-bottom: none;
+}
+
+.corner--tr {
+  top: -1px;
+  right: -1px;
+  border-left: none;
+  border-bottom: none;
+}
+
+.corner--bl {
+  bottom: -1px;
+  left: -1px;
+  border-right: none;
+  border-top: none;
+}
+
+.corner--br {
+  bottom: -1px;
+  right: -1px;
+  border-left: none;
+  border-top: none;
+}
+
+/* Glow Effect */
+.neon-button__glow {
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, transparent, var(--primary-neon), transparent);
+  border-radius: 8px;
+  opacity: 0;
+  animation: rotateGlow 3s linear infinite;
+  transition: opacity 0.3s ease;
+  z-index: 0;
+}
+
+.neon-button--secondary .neon-button__glow {
+  background: linear-gradient(45deg, transparent, var(--secondary-neon), transparent);
+}
+
+.neon-button--danger .neon-button__glow {
+  background: linear-gradient(45deg, transparent, var(--danger-neon), transparent);
+}
+
+.neon-button--glow:hover .neon-button__glow {
+  opacity: 1;
+}
+
+@keyframes rotateGlow {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* ===== NEON INPUT COMPONENTS ===== */
+.neon-input-container {
+  position: relative;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.neon-input-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+.neon-input {
+  width: 100%;
+  background: rgba(13, 17, 23, 0.9);
+  border: 2px solid;
+  border-radius: 8px;
+  font-family: 'Manrope', 'Noto Sans', sans-serif;
+  font-weight: 400;
+  color: var(--text-primary);
+  outline: none;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 2;
+  backdrop-filter: blur(5px);
+}
+
+/* Input Sizes */
+.neon-input--sm {
+  padding: 8px 12px;
+  font-size: 14px;
+}
+
+.neon-input--md {
+  padding: 12px 16px;
+  font-size: 16px;
+}
+
+.neon-input--lg {
+  padding: 16px 20px;
+  font-size: 18px;
+}
+
+/* Input Variants */
+.neon-input--primary {
+  border-color: rgba(0, 212, 255, 0.5);
+  box-shadow: 
+    0 0 8px rgba(0, 212, 255, 0.2),
+    inset 0 0 8px rgba(0, 212, 255, 0.08);
+}
+
+.neon-input--primary:focus,
+.neon-input--primary.neon-input--focused {
+  border-color: var(--primary-neon);
+  box-shadow: 
+    0 0 25px rgba(0, 169, 255, 0.4),
+    inset 0 0 25px rgba(0, 169, 255, 0.1);
+  text-shadow: 0 0 5px rgba(0, 169, 255, 0.3);
+}
+
+.neon-input--secondary {
+  border-color: rgba(0, 255, 136, 0.3);
+  box-shadow: 
+    0 0 15px rgba(0, 255, 136, 0.1),
+    inset 0 0 15px rgba(0, 255, 136, 0.05);
+}
+
+.neon-input--secondary:focus,
+.neon-input--secondary.neon-input--focused {
+  border-color: var(--secondary-neon);
+  box-shadow: 
+    0 0 25px rgba(0, 255, 136, 0.4),
+    inset 0 0 25px rgba(0, 255, 136, 0.1);
+  text-shadow: 0 0 5px rgba(0, 255, 136, 0.3);
+}
+
+.neon-input--danger {
+  border-color: rgba(255, 0, 85, 0.3);
+  box-shadow: 
+    0 0 15px rgba(255, 0, 85, 0.1),
+    inset 0 0 15px rgba(255, 0, 85, 0.05);
+}
+
+.neon-input--danger:focus,
+.neon-input--danger.neon-input--focused {
+  border-color: var(--danger-neon);
+  box-shadow: 
+    0 0 25px rgba(255, 0, 85, 0.4),
+    inset 0 0 25px rgba(255, 0, 85, 0.1);
+  text-shadow: 0 0 5px rgba(255, 0, 85, 0.3);
+}
+
+/* Input States */
+.neon-input::placeholder {
+  color: var(--text-muted);
+  opacity: 0.8;
+}
+
+.neon-input--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: grayscale(50%);
+}
+
+/* Glow Effect */
+.neon-input-glow {
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: transparent;
+  border-radius: 8px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1;
+}
+
+.neon-input-container--primary.neon-input-container--focused .neon-input-glow {
+  background: linear-gradient(45deg, transparent, var(--primary-neon), transparent);
+  opacity: 0.3;
+  animation: rotateGlow 3s linear infinite;
+}
+
+.neon-input-container--secondary.neon-input-container--focused .neon-input-glow {
+  background: linear-gradient(45deg, transparent, var(--secondary-neon), transparent);
+  opacity: 0.3;
+  animation: rotateGlow 3s linear infinite;
+}
+
+.neon-input-container--danger.neon-input-container--focused .neon-input-glow {
+  background: linear-gradient(45deg, transparent, var(--danger-neon), transparent);
+  opacity: 0.3;
+  animation: rotateGlow 3s linear infinite;
+}
+
+/* Corner Decorations */
+.neon-input-corners {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 3;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.neon-input-container--focused .neon-input-corners {
+  opacity: 1;
+}
+
+.neon-input-corner {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border: 2px solid;
+}
+
+.neon-input-container--primary .neon-input-corner {
+  border-color: var(--primary-neon);
+}
+
+.neon-input-container--secondary .neon-input-corner {
+  border-color: var(--secondary-neon);
+}
+
+.neon-input-container--danger .neon-input-corner {
+  border-color: var(--danger-neon);
+}
+
+.neon-input-corner--tl {
+  top: -1px;
+  left: -1px;
+  border-right: none;
+  border-bottom: none;
+}
+
+.neon-input-corner--tr {
+  top: -1px;
+  right: -1px;
+  border-left: none;
+  border-bottom: none;
+}
+
+.neon-input-corner--bl {
+  bottom: -1px;
+  left: -1px;
+  border-right: none;
+  border-top: none;
+}
+
+.neon-input-corner--br {
+  bottom: -1px;
+  right: -1px;
+  border-left: none;
+  border-top: none;
+}
+
+/* Scan Line Effect */
+.neon-input-scan-line {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(0, 169, 255, 0.4), 
+    transparent);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.neon-input-container--secondary .neon-input-scan-line {
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(0, 255, 136, 0.4), 
+    transparent);
+}
+
+.neon-input-container--danger .neon-input-scan-line {
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255, 0, 85, 0.4), 
+    transparent);
+}
+
+/* Character Count */
+.neon-input-char-count {
+  position: absolute;
+  bottom: 8px;
+  right: 12px;
+  font-size: 12px;
+  color: var(--text-muted);
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  z-index: 4;
+}
+
+.neon-input-char-count .text-warning {
+  color: var(--warning-neon);
+  text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+}
+
+/* Textarea specific styles */
+.neon-input[rows] {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Hover effects */
+.neon-input-wrapper:hover .neon-input:not(.neon-input--disabled) {
+  transform: translateY(-1px);
+}
+
+.neon-input-container:hover .neon-input-corners {
+  opacity: 0.5;
+}
+
+/* Focus animation */
+@keyframes inputFocusGlow {
+  0% {
+    box-shadow: 
+      0 0 15px rgba(0, 169, 255, 0.1),
+      inset 0 0 15px rgba(0, 169, 255, 0.05);
+  }
+  100% {
+    box-shadow: 
+      0 0 25px rgba(0, 169, 255, 0.4),
+      inset 0 0 25px rgba(0, 169, 255, 0.1);
+  }
+}
+
+.neon-input--primary.neon-input--focused {
+  animation: inputFocusGlow 0.3s ease-out;
+}
+
+/* ===== NEON PROGRESS BAR COMPONENTS ===== */
+.neon-progress-container {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.neon-progress-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.neon-progress-label-text {
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.neon-progress-percentage {
+  color: var(--primary-neon);
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  text-shadow: 0 0 5px rgba(0, 169, 255, 0.5);
+}
+
+.neon-progress {
+  position: relative;
+  width: 100%;
+  background: var(--bg-darker);
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border-primary);
+}
+
+/* Progress Sizes */
+.neon-progress--sm {
+  height: 8px;
+}
+
+.neon-progress--md {
+  height: 12px;
+}
+
+.neon-progress--lg {
+  height: 16px;
+}
+
+/* Background Glow */
+.neon-progress-bg-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 169, 255, 0.05);
+  z-index: 1;
+}
+
+/* Progress Fill */
+.neon-progress-fill {
+  position: relative;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    var(--primary-neon),
+    #0088ff
+  );
+  border-radius: inherit;
+  overflow: hidden;
+  z-index: 2;
+}
+
+.neon-progress-fill--secondary {
+  background: linear-gradient(90deg, 
+    var(--secondary-neon),
+    #00cc66
+  );
+}
+
+.neon-progress-fill--success {
+  background: linear-gradient(90deg, 
+    var(--secondary-neon),
+    #00cc66
+  );
+}
+
+.neon-progress-fill--danger {
+  background: linear-gradient(90deg, 
+    var(--danger-neon),
+    #cc0044
+  );
+}
+
+.neon-progress-fill--warning {
+  background: linear-gradient(90deg, 
+    var(--warning-neon),
+    #ffaa00
+  );
+}
+
+/* Progress Fill Glow */
+.neon-progress-fill-glow {
+  position: absolute;
+  top: -2px;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  background: inherit;
+  filter: blur(8px);
+  opacity: 0.6;
+  z-index: -1;
+}
+
+.neon-progress-fill--complete {
+  animation: completePulse 1s ease-out;
+}
+
+@keyframes completePulse {
+  0%, 100% {
+    filter: brightness(1);
+    box-shadow: 0 0 20px rgba(0, 169, 255, 0.8);
+  }
+  50% {
+    filter: brightness(1.5);
+    box-shadow: 0 0 30px rgba(0, 169, 255, 1);
+  }
+}
+
+/* Data Flow Animation */
+.neon-progress-data-flow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+}
+
+.data-stream {
+  position: absolute;
+  top: 0;
+  left: -50%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  animation: dataFlow 2s linear infinite;
+}
+
+.data-stream--delayed {
+  animation-delay: 1s;
+  background: linear-gradient(90deg, 
+    transparent,
+    rgba(0, 169, 255, 0.6),
+    transparent
+  );
+}
+
+@keyframes dataFlow {
+  0% {
+    left: -50%;
+  }
+  100% {
+    left: 150%;
+  }
+}
+
+/* Scan Line */
+.neon-progress-scan-line {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 2px;
+  height: 100%;
+  background: linear-gradient(to bottom,
+    transparent,
+    rgba(255, 255, 255, 0.8),
+    transparent
+  );
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+}
+
+/* Corner Decorations */
+.neon-progress-corners {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.progress-corner {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border: 1px solid var(--primary-neon);
+}
+
+.progress-corner--tl {
+  top: -1px;
+  left: -1px;
+  border-right: none;
+  border-bottom: none;
+}
+
+.progress-corner--tr {
+  top: -1px;
+  right: -1px;
+  border-left: none;
+  border-bottom: none;
+}
+
+.progress-corner--bl {
+  bottom: -1px;
+  left: -1px;
+  border-right: none;
+  border-top: none;
+}
+
+.progress-corner--br {
+  bottom: -1px;
+  right: -1px;
+  border-left: none;
+  border-top: none;
+}
+
+/* Circuit Lines */
+.neon-progress-circuits {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.circuit-line {
+  position: absolute;
+  background: var(--border-glow);
+  opacity: 0.3;
+}
+
+.circuit-line--horizontal {
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  transform: translateY(-50%);
+}
+
+.circuit-line--vertical {
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  transform: translateX(-50%);
+}
+
+/* Complete Indicator */
+.neon-progress-complete-indicator {
+  position: absolute;
+  top: 50%;
+  right: -30px;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.complete-glow-ring {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--secondary-neon);
+  border-radius: 50%;
+  background: var(--secondary-neon);
+  box-shadow: 
+    0 0 10px var(--secondary-neon),
+    inset 0 0 10px rgba(0, 255, 136, 0.3);
+  animation: completeRingPulse 2s infinite;
+}
+
+.complete-text {
+  font-size: 10px;
+  font-weight: bold;
+  color: var(--secondary-neon);
+  text-shadow: 0 0 5px var(--secondary-neon);
+  letter-spacing: 1px;
+}
+
+@keyframes completeRingPulse {
+  0%, 100% {
+    box-shadow: 
+      0 0 10px var(--secondary-neon),
+      inset 0 0 10px rgba(0, 255, 136, 0.3);
+  }
+  50% {
+    box-shadow: 
+      0 0 20px var(--secondary-neon),
+      inset 0 0 20px rgba(0, 255, 136, 0.5);
+  }
+}
+
+/* ===== CIRCULAR PROGRESS BAR ===== */
+.neon-circular-progress {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.circular-progress-svg {
+  transform: rotate(-90deg);
+}
+
+.circular-progress-bg {
+  fill: none;
+  stroke: var(--bg-card);
+  stroke-width: 4;
+}
+
+.circular-progress-fill {
+  fill: none;
+  stroke: var(--primary-neon);
+  stroke-width: 4;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 8px rgba(0, 169, 255, 0.6));
+}
+
+.neon-circular-progress--secondary .circular-progress-fill {
+  stroke: var(--secondary-neon);
+  filter: drop-shadow(0 0 8px rgba(0, 255, 136, 0.6));
+}
+
+.neon-circular-progress--danger .circular-progress-fill {
+  stroke: var(--danger-neon);
+  filter: drop-shadow(0 0 8px rgba(255, 0, 85, 0.6));
+}
+
+.circular-progress-glow {
+  fill: none;
+  stroke: var(--primary-neon);
+  stroke-width: 8;
+  stroke-linecap: round;
+  opacity: 0.3;
+  filter: blur(4px);
+}
+
+.circular-progress-content {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+.circular-progress-percentage {
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--text-primary);
+  text-shadow: 0 0 5px rgba(0, 169, 255, 0.5);
+}
+
+/* Animation Variants */
+.neon-progress--animated .neon-progress-fill {
+  animation: progressGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes progressGlow {
+  0% {
+    filter: brightness(1);
+  }
+  100% {
+    filter: brightness(1.2);
+  }
+}
+
+/* ===== SCROLLBAR STYLING ===== */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-darker);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary-neon);
+  border-radius: 4px;
+  box-shadow: 0 0 5px rgba(0, 169, 255, 0.5);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #0088cc;
+  box-shadow: 0 0 10px rgba(0, 169, 255, 0.8);
+}
+
+/* ===== 電影級互動特效 ===== */
+
+/* 磁性吸附效果 */
+.magnetic-attraction {
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+  will-change: transform;
+}
+
+.magnetic-attraction:hover {
+  transform: translateY(-8px) scale(1.05);
+  filter: drop-shadow(0 15px 35px rgba(0, 170, 255, 0.4));
+}
+
+/* 波紋擴散效果 */
+.ripple-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple-effect::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: radial-gradient(circle, rgba(0, 170, 255, 0.6) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  pointer-events: none;
+  transition: width 0.8s ease-out, height 0.8s ease-out;
+}
+
+.ripple-effect:active::after {
+  width: 400px;
+  height: 400px;
+}
+
+/* 視差滾動層 */
+.parallax-layer {
+  will-change: transform;
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+.parallax-layer--slow {
+  animation: parallaxSlow 60s linear infinite;
+}
+
+.parallax-layer--fast {
+  animation: parallaxFast 30s linear infinite;
+}
+
+@keyframes parallaxSlow {
+  0% { transform: translateY(0) rotateX(0deg); }
+  100% { transform: translateY(-20px) rotateX(1deg); }
+}
+
+@keyframes parallaxFast {
+  0% { transform: translateY(0) rotateX(0deg); }
+  100% { transform: translateY(-40px) rotateX(2deg); }
+}
+
+/* 打字機效果 */
+.typewriter-effect {
+  overflow: hidden;
+  border-right: 2px solid var(--primary-color);
+  white-space: nowrap;
+  animation: typewriter 3s steps(40, end), blink-cursor 1s infinite;
+}
+
+@keyframes typewriter {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink-cursor {
+  0%, 50% { border-color: var(--primary-color); }
+  51%, 100% { border-color: transparent; }
+}
+
+/* 鏡頭光暈跟隨器 */
+.lens-flare-tracker {
+  position: fixed;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(0, 170, 255, 0.3) 0%,
+    rgba(0, 170, 255, 0.1) 30%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 9999;
+  animation: lensFlare 2s ease-in-out infinite;
+  mix-blend-mode: screen;
+}
+
+/* 粒子爆炸按鈕 */
+.particle-explosion-btn {
+  position: relative;
+  overflow: visible;
+}
+
+.particle-explosion-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: conic-gradient(
+    from 0deg,
+    var(--primary-color),
+    var(--accent-neon),
+    var(--secondary-neon),
+    var(--primary-color)
+  );
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  opacity: 0;
+  z-index: -1;
+}
+
+.particle-explosion-btn:active::before {
+  animation: particleExplosion 0.6s ease-out;
+}
+
+/* 光線追蹤按鈕 */
+.light-ray-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.light-ray-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(0, 170, 255, 0.4),
+    transparent
+  );
+  transition: left 0.6s ease-in-out;
+}
+
+.light-ray-btn:hover::after {
+  left: 100%;
+}
+
+/* 全息卡片效果 */
+.holographic-card {
+  position: relative;
+  background: linear-gradient(
+    45deg,
+    rgba(0, 170, 255, 0.1) 0%,
+    rgba(26, 42, 58, 0.15) 50%,
+    rgba(83, 82, 237, 0.1) 100%
+  );
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 170, 255, 0.3);
+  transform-style: preserve-3d;
+  transition: all 0.3s ease;
+}
+
+.holographic-card::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(
+    45deg,
+    var(--primary-color),
+    var(--accent-neon),
+    var(--primary-color)
+  );
+  z-index: -1;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.holographic-card:hover {
+  transform: rotateX(5deg) rotateY(10deg) translateZ(20px);
+}
+
+.holographic-card:hover::before {
+  opacity: 0.3;
+  animation: lightRayTrace 2s infinite;
+}
+
+/* 數據流背景效果 */
+.data-flow-bg {
+  position: relative;
+  overflow: hidden;
+}
+
+.data-flow-bg::before,
+.data-flow-bg::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    var(--primary-color) 50%,
+    transparent 100%
+  );
+  animation: dataFlowVertical 3s linear infinite;
+}
+
+.data-flow-bg::before {
+  left: 20%;
+  animation-delay: -1s;
+}
+
+.data-flow-bg::after {
+  right: 30%;
+  animation-delay: -2s;
+}
+
+@keyframes dataFlowVertical {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
+/* ===== LinguaCheck 按鈕樣式 ===== */
+.btn-primary {
+  display: flex;
+  min-width: 84px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 8px;
+  height: 3rem;
+  padding: 0 1.5rem;
+  background-color: var(--primary-color);
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  line-height: normal;
+  letter-spacing: -0.01em;
+  border: none;
+  transition: all 0.3s ease-in-out;
+}
+
+.btn-primary:hover {
+  background-color: #0088cc;
+  box-shadow: 0 0 20px var(--primary-color);
+}
+
+.btn-secondary {
+  display: flex;
+  min-width: 84px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 8px;
+  height: 3rem;
+  padding: 0 1.5rem;
+  background-color: var(--secondary-color);
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-weight: bold;
+  line-height: normal;
+  letter-spacing: -0.01em;
+  border: none;
+  transition: all 0.3s ease-in-out;
+}
+
+.btn-secondary:hover {
+  background-color: rgba(26, 42, 58, 0.8);
+  box-shadow: 0 0 15px rgba(0, 170, 255, 0.5);
+}

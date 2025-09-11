@@ -48,7 +48,7 @@ export const config: AppConfig = {
   requestTimeout: parseNumber(import.meta.env.VITE_REQUEST_TIMEOUT, 30000),
   
   // Application Information
-  appName: import.meta.env.VITE_APP_NAME || 'AI 錯字檢查',
+  appName: import.meta.env.VITE_APP_NAME || 'TextCheck',
   appDescription: import.meta.env.VITE_APP_DESCRIPTION || 'AI-powered Chinese text correction tool',
   appVersion: import.meta.env.VITE_APP_VERSION || '1.0.0',
   

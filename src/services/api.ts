@@ -21,9 +21,25 @@ class APIService {
   ): Promise<T> {
     const url = `${this.baseURL}${endpoint}`;
     const controller = new AbortController();
+    const requestId = Math.random().toString(36).substr(2, 9);
     
     // Set timeout
     const timeoutId = setTimeout(() => controller.abort(), this.timeout);
+
+    console.group(`%c🚀 API Request [${requestId}]`, 'color: #4CAF50; font-weight: bold;');
+    console.log('📤 URL:', url);
+    console.log('📝 Method:', options.method || 'GET');
+    
+    if (options.body) {
+      try {
+        const bodyData = JSON.parse(options.body as string);
+        console.log('📦 Request Body:', bodyData);
+      } catch {
+        console.log('📦 Request Body:', options.body);
+      }
+    }
+    
+    const startTime = Date.now();
 
     try {
       const response = await fetch(url, {
@@ -35,15 +51,30 @@ class APIService {
         },
       });
 
+      const duration = Date.now() - startTime;
       clearTimeout(timeoutId);
 
+      console.log(`⏱️ Response Time: ${duration}ms`);
+      console.log('📊 Status:', response.status, response.statusText);
+      console.log('📋 Headers:', Object.fromEntries(response.headers.entries()));
+
       if (!response.ok) {
+        console.error('❌ HTTP Error:', response.status, response.statusText);
+        console.groupEnd();
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      return await response.json();
+      const responseData = await response.json();
+      console.log('📥 Response Data:', responseData);
+      console.groupEnd();
+      
+      return responseData;
     } catch (error) {
+      const duration = Date.now() - startTime;
       clearTimeout(timeoutId);
+      
+      console.error(`❌ Request Failed after ${duration}ms:`, error);
+      console.groupEnd();
       
       if (error instanceof Error) {
         if (error.name === 'AbortError') {
@@ -84,7 +115,9 @@ class APIService {
     language?: string;
     concurrent?: number;
   }): Promise<BatchProcessingResult> {
-    return this.makeRequest<BatchProcessingResult>('/text/batch-correct', {
+    console.log(`%c📝 Starting batch correction for ${paragraphs.length} paragraphs`, 'color: #2196F3; font-weight: bold;');
+    
+    const result = await this.makeRequest<BatchProcessingResult>('/text/batch-correct', {
       method: 'POST',
       body: JSON.stringify({
         paragraphs,
@@ -95,6 +128,9 @@ class APIService {
         },
       }),
     });
+
+    console.log(`%c✅ Batch correction completed`, 'color: #4CAF50; font-weight: bold;', result);
+    return result;
   }
 
   // Google Docs import API
@@ -102,7 +138,7 @@ class APIService {
     return this.makeRequest<GoogleDocsImport>('/google-docs/import', {
       method: 'POST',
       body: JSON.stringify({
-        docUrl,
+        url: docUrl,
       }),
     });
   }
