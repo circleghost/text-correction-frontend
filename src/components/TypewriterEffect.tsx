@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 interface TypewriterEffectProps {
@@ -18,7 +18,7 @@ export const TypewriterEffect: React.FC<TypewriterEffectProps> = ({
   onComplete,
   isActive = true,
   speed = 500, // words per minute
-  shouldLoop = false
+  shouldLoop: shouldLoop = false
 }) => {
   const [displayText, setDisplayText] = useState('');
   const [isTyping, setIsTyping] = useState(false);

@@ -11,7 +11,6 @@ interface TextComparisonProps {
   showDifferences?: boolean;
 }
 
-type ViewMode = 'side-by-side' | 'inline';
 type DiffGranularity = 'character' | 'word';
 
 export const TextComparison: React.FC<TextComparisonProps> = ({
@@ -21,7 +20,7 @@ export const TextComparison: React.FC<TextComparisonProps> = ({
   onCopy,
   showDifferences = false
 }) => {
-  const [diffGranularity, setDiffGranularity] = useState<DiffGranularity>('character');
+  const [diffGranularity] = useState<DiffGranularity>('character');
 
   // Calculate diffs based on granularity
   const sideBySideDiff = useMemo(() => {
@@ -38,10 +37,6 @@ export const TextComparison: React.FC<TextComparisonProps> = ({
     return getDiffStats(sideBySideDiff);
   }, [sideBySideDiff]);
 
-  const handleCopyOriginal = useCallback(() => {
-    navigator.clipboard.writeText(originalText);
-    onCopy?.(originalText);
-  }, [originalText, onCopy]);
 
   const handleCopyCorrected = useCallback(() => {
     navigator.clipboard.writeText(correctedText);
@@ -91,37 +86,6 @@ export const TextComparison: React.FC<TextComparisonProps> = ({
     }).filter(Boolean); // Remove null entries
   };
 
-  const renderDiffText = (diffs: DiffResult[], type: 'original' | 'corrected') => {
-    return diffs.map((diff, index) => {
-      let className = '';
-      let bgColor = '';
-
-      switch (diff.type) {
-        case 'insert':
-          className = 'text-diff-added';
-          bgColor = 'bg-green-900/30 text-green-400';
-          break;
-        case 'delete':
-          className = 'text-diff-removed';
-          bgColor = 'bg-red-900/30 text-red-400 line-through';
-          break;
-        case 'equal':
-          className = 'text-diff-unchanged';
-          bgColor = 'bg-gray-800/30 text-gray-200';
-          break;
-      }
-
-      return (
-        <span
-          key={`${type}-${index}`}
-          className={`${className} ${bgColor} rounded`}
-          data-type={diff.type}
-        >
-          {renderTextWithLineBreaks(diff.text)}
-        </span>
-      );
-    });
-  };
 
   const renderInlineDiff = (diffs: DiffResult[]) => {
     return diffs.map((diff, index) => {

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Layout, TextInputComponent, TextComparison, ScrambledTextEffect, TypewriterEffect, DecryptedTextEffect, TextShuffleEffect } from '@/components';
 import NeonButton, { PulseButton, ScanButton } from '@/components/NeonButton';
-import NeonProgressBar, { CircularNeonProgress } from '@/components/NeonProgressBar';
 import FloatingParticles from '@/components/FloatingParticles';
 import { useTextCorrectionStore, useInputText, useGoogleDocsUrl, useInputMethod, useIsCompleted, useParagraphs, useProcessingProgress } from '@/stores/textCorrectionStore';
 import { apiService } from '@/services/api';
@@ -218,7 +217,6 @@ const Home: React.FC = () => {
             </div>
 
             {/* Text Input / Processing Animation */}
-            {console.log('🖥️ Render check:', { showProcessingScramble, showGoogleDocsAnimation, inputMethod, showDemo, inputTextLength: inputText?.length, googleDocsTextLength: googleDocsText?.length, isCompleted, resultsAnimationComplete })}
             <div className="mb-8">
               <AnimatePresence mode="wait">
               {(() => {
@@ -243,7 +241,6 @@ const Home: React.FC = () => {
                   transition={{ duration: 0.3 }}
                   className="mb-8 w-full max-w-3xl mx-auto"
                 >
-                  {console.log('✅ Processing animation rendering!', { inputTextLength: inputText?.length })}
                   <div className="tech-card glass">
                     <div className="p-6">
                       <div className="mb-4 text-lg font-semibold flex items-center gap-2" style={{color: 'var(--primary-color)'}}>

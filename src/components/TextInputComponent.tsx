@@ -10,7 +10,6 @@ export const TextInputComponent: React.FC<TextInputComponentProps> = ({ classNam
   const inputMethod = useInputMethod();
   const inputText = useInputText();
   const googleDocsUrl = useGoogleDocsUrl();
-  const error = useError();
   
   const { setInputMethod, setInputText, setGoogleDocsUrl, clearError } = useTextCorrectionStore();
   
