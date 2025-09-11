@@ -11,7 +11,7 @@ class APIService {
   private timeout: number;
 
   constructor() {
-    this.baseURL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api/v1';
+    this.baseURL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001';
     this.timeout = 30000; // 30 seconds
   }
 
@@ -93,7 +93,7 @@ class APIService {
     preserveFormatting?: boolean;
     correctionLevel?: 'basic' | 'standard' | 'advanced';
   }): Promise<TextProcessingResult> {
-    return this.makeRequest<TextProcessingResult>('/text/correct', {
+    return this.makeRequest<TextProcessingResult>('/api/v1/text/correct', {
       method: 'POST',
       body: JSON.stringify({
         text,
@@ -117,7 +117,7 @@ class APIService {
   }): Promise<BatchProcessingResult> {
     console.log(`%c📝 Starting batch correction for ${paragraphs.length} paragraphs`, 'color: #2196F3; font-weight: bold;');
     
-    const result = await this.makeRequest<BatchProcessingResult>('/text/batch-correct', {
+    const result = await this.makeRequest<BatchProcessingResult>('/api/v1/text/batch-correct', {
       method: 'POST',
       body: JSON.stringify({
         paragraphs,
@@ -135,7 +135,7 @@ class APIService {
 
   // Google Docs import API
   async importGoogleDoc(docUrl: string): Promise<GoogleDocsImport> {
-    return this.makeRequest<GoogleDocsImport>('/google-docs/import', {
+    return this.makeRequest<GoogleDocsImport>('/api/v1/google-docs/import', {
       method: 'POST',
       body: JSON.stringify({
         url: docUrl,
