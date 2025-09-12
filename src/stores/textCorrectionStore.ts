@@ -24,7 +24,7 @@ interface TextCorrectionStore extends AppState {
   
   // Paragraph management
   updateParagraphStatus: (id: string, status: Paragraph['status']) => void;
-  updateParagraphCorrections: (id: string, corrections: TextCorrection[]) => void;
+  updateParagraphCorrections: (id: string, corrections: TextCorrection[], correctedText?: string) => void;
   
   // Error handling
   setError: (error: string | null) => void;
@@ -254,8 +254,13 @@ export const useTextCorrectionStore = create<TextCorrectionStore>()(
                   get().updateParagraphStatus(paragraphResult.paragraphId, 'completed');
                   console.log(`✅ Updated paragraph ${paragraphResult.paragraphId} to completed`);
                   if (paragraphResult.corrections) {
-                    get().updateParagraphCorrections(paragraphResult.paragraphId, paragraphResult.corrections);
+                    get().updateParagraphCorrections(
+                      paragraphResult.paragraphId, 
+                      paragraphResult.corrections,
+                      paragraphResult.correctedText
+                    );
                     console.log(`📝 Applied ${paragraphResult.corrections.length} corrections to paragraph ${paragraphResult.paragraphId}`);
+                    console.log(`📝 Corrected text: "${paragraphResult.correctedText}"`);
                   }
                 } else {
                   get().updateParagraphStatus(paragraphResult.paragraphId, 'error');
@@ -315,10 +320,11 @@ export const useTextCorrectionStore = create<TextCorrectionStore>()(
         console.log(`✅ Paragraph ${id} status updated successfully`);
       },
 
-      // Update paragraph corrections
-      updateParagraphCorrections: (id, corrections) => {
+      // Update paragraph corrections and corrected text
+      updateParagraphCorrections: (id, corrections, correctedText?) => {
         console.group(`%c📝 Updating paragraph ${id} corrections`, 'color: #4CAF50; font-weight: bold;');
         console.log('📋 Corrections received:', corrections);
+        console.log('📝 Corrected text received:', correctedText);
         const state = get();
         const paragraph = state.paragraphs.find(p => p.id === id);
         if (paragraph) {
@@ -330,17 +336,19 @@ export const useTextCorrectionStore = create<TextCorrectionStore>()(
             ? { 
                 ...p, 
                 corrections,
-                correctedText: corrections.length > 0 ? 
-                  corrections.reduce((text, correction) => 
-                    text.replace(correction.original, correction.corrected), p.text) : 
-                  p.text 
+                // Use provided correctedText if available, otherwise try to apply corrections
+                correctedText: correctedText || 
+                  (corrections.length > 0 ? 
+                    corrections.reduce((text, correction) => 
+                      text.replace(correction.original, correction.corrected), p.text) : 
+                    p.text)
               } 
             : p
         );
         
         const updatedParagraph = updatedParagraphs.find(p => p.id === id);
         if (updatedParagraph) {
-          console.log('📝 Corrected text:', updatedParagraph.correctedText);
+          console.log('📝 Final corrected text:', updatedParagraph.correctedText);
           console.log('📊 Applied corrections:', updatedParagraph.corrections.length);
         }
         
