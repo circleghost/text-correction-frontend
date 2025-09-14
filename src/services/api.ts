@@ -195,6 +195,91 @@ class APIService {
   async healthCheck(): Promise<{ status: string; timestamp: string }> {
     return this.makeRequest<{ status: string; timestamp: string }>('/health');
   }
+
+  // Usage tracking APIs
+  async getCurrentUsage(period: 'day' | 'week' | 'month' | 'all' = 'month'): Promise<{
+    success: boolean;
+    data: {
+      totalRequests: number;
+      totalCharacters: number;
+      totalTokens: number;
+      monthlyRequests: number;
+      monthlyCharacters: number;
+      dailyRequests: number;
+      dailyCharacters: number;
+      averageProcessingTime?: number;
+      totalErrors: number;
+      lastActivity?: Date;
+    };
+  }> {
+    return this.makeRequest(`/usage/current?period=${period}`);
+  }
+
+  async getUsageHistory(options: {
+    limit?: number;
+    offset?: number;
+    startDate?: Date;
+    endDate?: Date;
+    actionType?: 'correction_request' | 'text_processed' | 'api_call';
+  } = {}): Promise<{
+    success: boolean;
+    data: Array<{
+      id: string;
+      actionType: string;
+      textLength: number;
+      tokensUsed?: number;
+      createdAt: Date;
+      processingTimeMs?: number;
+      errorCode?: string;
+      featureUsed?: string;
+      metadata?: any;
+    }>;
+    pagination: {
+      total: number;
+      limit: number;
+      offset: number;
+      hasMore: boolean;
+    };
+  }> {
+    const params = new URLSearchParams();
+    if (options.limit) params.append('limit', options.limit.toString());
+    if (options.offset) params.append('offset', options.offset.toString());
+    if (options.startDate) params.append('startDate', options.startDate.toISOString());
+    if (options.endDate) params.append('endDate', options.endDate.toISOString());
+    if (options.actionType) params.append('actionType', options.actionType);
+
+    return this.makeRequest(`/usage/history?${params.toString()}`);
+  }
+
+  async getQuotaStatus(): Promise<{
+    success: boolean;
+    data: Array<{
+      type: 'monthly_corrections' | 'monthly_characters' | 'monthly_requests' | 'daily_requests';
+      limit: number;
+      used: number;
+      remaining: number;
+      resetDate: Date;
+      tier: 'free' | 'premium' | 'enterprise' | 'admin';
+      percentageUsed: number;
+      isExceeded: boolean;
+    }>;
+  }> {
+    return this.makeRequest('/usage/quota/status');
+  }
+
+  async getUsageTrends(period: 'day' | 'week' | 'month' = 'month', groupBy: 'day' | 'week' | 'month' = 'day'): Promise<{
+    success: boolean;
+    data: Array<{
+      period: string;
+      totalRequests: number;
+      totalCharacters: number;
+      totalTokens: number;
+      averageProcessingTime: number;
+      errorCount: number;
+    }>;
+  }> {
+    return this.makeRequest(`/usage/trends?period=${period}&groupBy=${groupBy}`);
+  }
 }
 
 // Export singleton instance

@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from '@/pages/Home';
 import Profile from '@/pages/Profile';
+import Dashboard from '@/pages/Dashboard';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { AuthCallback, ProtectedRoute } from '@/components/auth';
 import { validateConfig } from '@/utils/config';
@@ -66,6 +67,11 @@ function App() {
             <Route path="/profile" element={
               <ProtectedRoute>
                 <Profile />
+              </ProtectedRoute>
+            } />
+            <Route path="/dashboard" element={
+              <ProtectedRoute>
+                <Dashboard />
               </ProtectedRoute>
             } />
           </Routes>

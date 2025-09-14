@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { config } from '@/utils/config';
 import { useAuth } from '@/contexts/AuthContext';
 import { LoginButton, UserProfile } from '@/components/auth';
@@ -22,10 +23,12 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
         </div>
       </div>
       <nav className="hidden md:flex items-center gap-8" style={{color: 'var(--text-primary)'}}>
-        <a className="text-sm font-medium leading-normal hover:text-[var(--primary-color)] transition-colors" href="#" style={{color: 'var(--text-secondary)'}}>首頁</a>
+        <Link to="/" className="text-sm font-medium leading-normal hover:text-[var(--primary-color)] transition-colors" style={{color: 'var(--text-secondary)'}}>首頁</Link>
         <a className="text-sm font-medium leading-normal hover:text-[var(--primary-color)] transition-colors" href="#" style={{color: 'var(--text-secondary)'}}>功能</a>
         <a className="text-sm font-medium leading-normal hover:text-[var(--primary-color)] transition-colors" href="#" style={{color: 'var(--text-secondary)'}}>定價</a>
-        <a className="text-sm font-medium leading-normal hover:text-[var(--primary-color)] transition-colors" href="#" style={{color: 'var(--text-secondary)'}}>資源</a>
+        {user && (
+          <Link to="/dashboard" className="text-sm font-medium leading-normal hover:text-[var(--primary-color)] transition-colors" style={{color: 'var(--text-secondary)'}}>使用量</Link>
+        )}
       </nav>
       <div className="flex items-center gap-4">
         {loading ? (
