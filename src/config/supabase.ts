@@ -1,8 +1,8 @@
 import { createClient } from '@supabase/supabase-js'
 
 // Supabase configuration
-const supabaseUrl = 'https://qcmamgtwharlsiwjzikc.supabase.co'
-const supabaseKey = 'sb_publishable_bdQ8wZOg0GBuLXRSJPH6uw_Mp5p7ocd'
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://qcmamgtwharlsiwjzikc.supabase.co'
+const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || 'sb_publishable_bdQ8wZOg0GBuLXRSJPH6uw_Mp5p7ocd'
 
 // Create Supabase client
 export const supabase = createClient(supabaseUrl, supabaseKey, {
@@ -20,7 +20,7 @@ export const supabase = createClient(supabaseUrl, supabaseKey, {
 export const authConfig = {
   providers: {
     google: {
-      redirectTo: `${window.location.origin}/auth/callback`
+      redirectTo: `${import.meta.env.VITE_APP_URL || window.location.origin}/auth/callback`
     }
   }
 }
