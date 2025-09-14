@@ -33,7 +33,9 @@ const NeonButton: React.FC<NeonButtonProps> = ({
 
   const buttonContent = (
     <>
-      <span className="neon-button__text">{children}</span>
+      <div className="neon-button__text flex items-center whitespace-nowrap">
+        {children}
+      </div>
       {type === 'scan' && (
         <>
           <div className="neon-button__scan-line"></div>

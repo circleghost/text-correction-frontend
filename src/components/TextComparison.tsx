@@ -138,10 +138,14 @@ export const TextComparison: React.FC<TextComparisonProps> = ({
             </h4>
             <button
               onClick={handleCopyCorrected}
-              className="px-2 py-1 text-xs text-gray-400 hover:text-gray-300 transition-colors"
+              className="px-2 py-1 text-xs text-gray-400 hover:text-gray-300 transition-colors flex items-center whitespace-nowrap"
               title="複製修正文字"
             >
-              複製結果
+              <svg className="w-3 h-3 mr-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z" />
+                <path d="M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2V5a2 2 0 00-2-2v8z" />
+              </svg>
+              <span>複製結果</span>
             </button>
           </div>
           <div className="text-base leading-relaxed text-gray-200">

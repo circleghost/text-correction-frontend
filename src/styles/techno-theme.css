@@ -987,6 +987,14 @@ body {
 .neon-button__text {
   position: relative;
   z-index: 2;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  gap: 0.5rem;
+}
+
+.neon-button__text svg {
+  flex-shrink: 0;
 }
 
 /* Pulse Animation */
