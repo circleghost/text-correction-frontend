@@ -1,7 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from '@/pages/Home';
+import Profile from '@/pages/Profile';
 import { AuthProvider } from '@/contexts/AuthContext';
-import { AuthCallback } from '@/components/auth';
+import { AuthCallback, ProtectedRoute } from '@/components/auth';
 import { validateConfig } from '@/utils/config';
 
 function App() {
@@ -62,6 +63,11 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/auth/callback" element={<AuthCallback />} />
+            <Route path="/profile" element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            } />
           </Routes>
         </div>
       </Router>

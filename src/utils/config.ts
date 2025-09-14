@@ -48,8 +48,8 @@ export const config: AppConfig = {
   requestTimeout: parseNumber(import.meta.env.VITE_REQUEST_TIMEOUT, 30000),
   
   // Application Information
-  appName: import.meta.env.VITE_APP_NAME || 'TextCheck',
-  appDescription: import.meta.env.VITE_APP_DESCRIPTION || 'AI-powered Chinese text correction tool',
+  appName: import.meta.env.VITE_APP_NAME || 'ÄlyPeck',
+  appDescription: import.meta.env.VITE_APP_DESCRIPTION || 'ÄlyPeck AI 錯字檢查器，啄木鳥級精準找出繁中錯字',
   appVersion: import.meta.env.VITE_APP_VERSION || '1.0.0',
   
   // Feature Flags
