@@ -1,5 +1,7 @@
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from '@/pages/Home';
+import { AuthProvider } from '@/contexts/AuthContext';
+import { AuthCallback } from '@/components/auth';
 import { validateConfig } from '@/utils/config';
 
 function App() {
@@ -54,11 +56,16 @@ function App() {
   }
 
   return (
-    <Router>
-      <div className='App'>
-        <Home />
-      </div>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <div className='App'>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/auth/callback" element={<AuthCallback />} />
+          </Routes>
+        </div>
+      </Router>
+    </AuthProvider>
   );
 }
 

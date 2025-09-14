@@ -1,11 +1,15 @@
 import React from 'react';
 import { config } from '@/utils/config';
+import { useAuth } from '@/contexts/AuthContext';
+import { LoginButton, UserProfile } from '@/components/auth';
 
 interface HeaderProps {
   className?: string;
 }
 
 export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
+  const { user, loading } = useAuth();
+
   return (
     <header className={`flex items-center justify-between whitespace-nowrap border-b border-solid border-[var(--secondary-color)] px-10 py-4 ${className}`} style={{backgroundColor: 'var(--background-dark)'}}>
       <div className="flex items-center gap-3 text-2xl font-bold text-white">
@@ -24,6 +28,23 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
         <a className="text-sm font-medium leading-normal hover:text-[var(--primary-color)] transition-colors" href="#" style={{color: 'var(--text-secondary)'}}>資源</a>
       </nav>
       <div className="flex items-center gap-4">
+        {loading ? (
+          <div className="w-8 h-8 border-2 border-gray-300 border-t-[var(--primary-color)] rounded-full animate-spin"></div>
+        ) : user ? (
+          <UserProfile 
+            variant="dropdown" 
+            showFullInfo={true}
+            className="hidden sm:block"
+          />
+        ) : (
+          <LoginButton 
+            variant="outline" 
+            size="sm"
+            className="hidden sm:block"
+          />
+        )}
+        
+        {/* Mobile menu button */}
         <button className="md:hidden p-2 rounded-md hover:bg-[var(--secondary-color)]">
           <span className="material-symbols-outlined">menu</span>
         </button>

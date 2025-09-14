@@ -23,15 +23,15 @@ export default defineConfig({
     port: 5173,
     open: true,
     proxy: {
-      // 代理 API 請求到後端
+      // 代理 API 請求到 auth worktree 後端 (有認證功能)
       '/api': {
-        target: 'http://localhost:3000',
+        target: 'http://localhost:3001',
         changeOrigin: true,
         secure: false,
       },
       // 代理健康檢查
       '/health': {
-        target: 'http://localhost:3000',
+        target: 'http://localhost:3001',
         changeOrigin: true,
         secure: false,
       },

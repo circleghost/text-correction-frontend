@@ -24,6 +24,9 @@
     "test:e2e:debug": "playwright test --debug"
   },
   "dependencies": {
+    "@supabase/auth-ui-react": "^0.4.7",
+    "@supabase/auth-ui-shared": "^0.1.8",
+    "@supabase/supabase-js": "^2.57.4",
     "@tailwindcss/postcss": "^4.1.13",
     "@tailwindcss/vite": "^4.1.13",
     "@types/diff-match-patch": "^1.0.36",

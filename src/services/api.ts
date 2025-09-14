@@ -1,5 +1,6 @@
 // API service for text correction backend communication
 
+import { supabase } from '@/config/supabase';
 import type {
   TextProcessingResult,
   BatchProcessingResult,
@@ -16,6 +17,30 @@ class APIService {
     // Caddy 會將其代理到 http://backend.zeabur.internal:8080/api/v1/*
     this.baseURL = import.meta.env.VITE_API_BASE_URL || '/api/v1';
     this.timeout = 30000; // 30 seconds
+  }
+
+  private async getAuthHeaders(): Promise<Record<string, string>> {
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    };
+
+    try {
+      // Get current session from Supabase
+      const { data: { session }, error } = await supabase.auth.getSession();
+      
+      if (error) {
+        console.warn('Auth session error:', error.message);
+      } else if (session?.access_token) {
+        headers['Authorization'] = `Bearer ${session.access_token}`;
+        console.log('🔐 Added auth token to request headers');
+      } else {
+        console.log('ℹ️ No auth token available - making anonymous request');
+      }
+    } catch (error) {
+      console.warn('Failed to get auth session:', error);
+    }
+
+    return headers;
   }
 
   private async makeRequest<T>(
@@ -45,12 +70,15 @@ class APIService {
     const startTime = Date.now();
 
     try {
+      // Get auth headers including JWT token
+      const authHeaders = await this.getAuthHeaders();
+      
       const response = await fetch(url, {
         ...options,
         signal: controller.signal,
         headers: {
-          'Content-Type': 'application/json',
-          ...options.headers,
+          ...authHeaders,
+          ...options.headers, // Allow override if needed
         },
       });
 
@@ -63,6 +91,23 @@ class APIService {
 
       if (!response.ok) {
         console.error('❌ HTTP Error:', response.status, response.statusText);
+        
+        // Handle authentication errors
+        if (response.status === 401) {
+          console.warn('🔐 Authentication required - user needs to log in');
+          // You can add custom logic here to redirect to login or show a message
+          const errorData = await response.json().catch(() => ({ message: 'Authentication required' }));
+          console.groupEnd();
+          throw new Error(`Authentication required: ${errorData.message || 'Please log in to continue'}`);
+        }
+        
+        // Handle quota exceeded
+        if (response.status === 429) {
+          const errorData = await response.json().catch(() => ({ message: 'Rate limit exceeded' }));
+          console.groupEnd();
+          throw new Error(`Usage limit exceeded: ${errorData.message || 'Please try again later'}`);
+        }
+        
         console.groupEnd();
         throw new Error(`HTTP error! status: ${response.status}`);
       }
