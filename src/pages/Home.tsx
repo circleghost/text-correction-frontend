@@ -54,6 +54,15 @@ const Home: React.FC = () => {
     }
   }, [isCompleted, paragraphs.length, resultsAnimationComplete, showProcessingScramble, showGoogleDocsAnimation]);
 
+  // Monitor processing completion to ensure animation knows when to end
+  useEffect(() => {
+    if (isCompleted && showProcessingScramble) {
+      console.log('📊 處理完成，動畫準備進入結束階段');
+      // The animation will handle the completion through its onComplete callback
+      // This useEffect ensures the animation components know the processing is done
+    }
+  }, [isCompleted, showProcessingScramble]);
+
   const handleStartProcessing = async () => {
     console.group(`%c🎬 User Started Processing`, 'color: #E91E63; font-weight: bold; font-size: 16px;');
     console.log('🎯 Input Method:', inputMethod);
@@ -81,28 +90,26 @@ const Home: React.FC = () => {
     console.log('🚀 Initiating text processing...');
     console.log('⏰ Timestamp:', new Date().toISOString());
     
-    // Show scrambled text effect for direct input
+    // Show scrambled text effect for direct input and start processing immediately
     if (inputMethod === 'direct' && inputText.trim()) {
       console.log('📱 Setting showProcessingScramble to TRUE');
       console.log('📍 Current state:', { showProcessingScramble, showDemo });
       setIsProcessingStarted(true);
       setShowProcessingScramble(true);
       
-      // Wait for scrambled effect to complete before starting actual processing
-      setTimeout(async () => {
-        console.log('⏰ 5 seconds passed, hiding scramble effect');
-        setShowProcessingScramble(false);
-        
-        try {
-          await startProcessing();
-          console.log('✅ Processing completed successfully');
-        } catch (error) {
-          console.error('❌ Processing failed:', error);
-        } finally {
-          setIsProcessingStarted(false);
-          console.groupEnd();
-        }
-      }, 5000); // 5 seconds for scrambled effect
+      // Start processing immediately (don't wait for animation)
+      console.log('🚀 Starting batch-correct request immediately');
+      startProcessing().then(() => {
+        console.log('✅ Processing completed successfully');
+        setIsProcessingStarted(false);
+        console.groupEnd();
+      }).catch((error) => {
+        console.error('❌ Processing failed:', error);
+        setIsProcessingStarted(false);
+        console.groupEnd();
+      });
+      
+      // Animation will continue until processing is complete
     } else {
       // For Google Docs, first fetch content then show animation
       console.log('🔗 Processing Google Docs - fetching content first');
@@ -254,11 +261,11 @@ const Home: React.FC = () => {
                           const textLength = animationText?.length || 0;
                           const lineCount = animationText?.split('\n').length || 1;
                           
-                          // Smart animation selection
-                          let animationType = 'scrambled';
-                          if (textLength >= 500 || lineCount >= 5) {
+                          // Smart animation selection - 讓亂碼效果適用於更長的文字
+                          let animationType = 'scrambled';  // 默認使用亂碼效果
+                          if (textLength >= 800 || lineCount >= 10) {
                             animationType = 'decrypted';
-                          } else if (textLength >= 100) {
+                          } else if (textLength >= 400) {
                             animationType = 'typewriter';
                           }
                           
@@ -275,17 +282,21 @@ const Home: React.FC = () => {
                             // Check if processing is complete
                             if (isCompleted) {
                               console.log('✅ 處理完成，準備滾動到結果');
-                              // Auto-scroll to results after animation completes
+                              // Hide animation and scroll to results
                               setTimeout(() => {
-                                const resultElement = document.getElementById('result-section');
-                                if (resultElement) {
-                                  resultElement.scrollIntoView({ 
-                                    behavior: 'smooth',
-                                    block: 'start'
-                                  });
-                                  console.log('📍 自動滾動到結果區塊');
-                                }
-                              }, 1000); // 1 second delay for smooth transition
+                                setShowProcessingScramble(false);
+                                // Auto-scroll to results after hiding animation
+                                setTimeout(() => {
+                                  const resultElement = document.getElementById('result-section');
+                                  if (resultElement) {
+                                    resultElement.scrollIntoView({ 
+                                      behavior: 'smooth',
+                                      block: 'start'
+                                    });
+                                    console.log('📍 自動滾動到結果區塊');
+                                  }
+                                }, 300); // Short delay for smooth transition
+                              }, 500); // Give animation 500ms to finish
                             } else {
                               console.log('⏳ 處理尚未完成，繼續等待');
                             }
@@ -330,6 +341,7 @@ const Home: React.FC = () => {
                                 duration={isCompleted ? 3000 : 30000} // Long duration if not complete yet
                                 className="text-sm leading-relaxed"
                                 onComplete={handleAnimationComplete}
+                                shouldLoop={!isCompleted} // Loop until processing is complete
                               />
                             );
                           }
