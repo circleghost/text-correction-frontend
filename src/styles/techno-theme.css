@@ -91,7 +91,7 @@ body {
 /* ===== LinguaCheck 簡潔背景網格 ===== */
 .circuit-board {
   background: 
-    /* 簡單網格線條 - 完全匹配LinguaCheck */
+    /* 深色模式網格線條 */
     linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
     linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
     /* 深色背景 */
@@ -108,6 +108,25 @@ body {
   min-height: 100vh;
 }
 
+/* 淺色模式的電路板樣式 */
+.light .circuit-board {
+  background: 
+    /* 淺色模式網格線條 */
+    linear-gradient(rgba(100, 116, 139, 0.1) 1px, transparent 1px),
+    linear-gradient(to right, rgba(100, 116, 139, 0.1) 1px, transparent 1px),
+    /* 淺色背景漸變 */
+    linear-gradient(135deg, 
+      rgba(248, 250, 252, 0.95) 0%,
+      rgba(241, 245, 249, 0.9) 25%,
+      rgba(226, 232, 240, 0.9) 75%,
+      rgba(248, 250, 252, 0.95) 100%
+    );
+  background-size: 
+    40px 40px,
+    40px 40px,
+    100% 100%;
+}
+
 .circuit-board::before {
   content: '';
   position: absolute;
@@ -116,10 +135,17 @@ body {
   right: 0;
   bottom: 0;
   background: 
-    /* 簡單漸層覆蓋 - 匹配LinguaCheck */
+    /* 深色模式漸層覆蓋 */
     linear-gradient(135deg, rgba(0, 0, 0, 0.6) 0%, transparent 50%, rgba(0, 0, 0, 0.6) 100%);
   pointer-events: none;
   z-index: 1;
+}
+
+/* 淺色模式的覆蓋層 */
+.light .circuit-board::before {
+  background: 
+    /* 淺色模式漸層覆蓋 */
+    linear-gradient(135deg, rgba(100, 116, 139, 0.1) 0%, transparent 50%, rgba(100, 116, 139, 0.1) 100%);
 }
 
 .circuit-board::after {
@@ -147,6 +173,25 @@ body {
   pointer-events: none;
   z-index: 0;
   animation: dataStreamBackground 20s linear infinite;
+}
+
+/* 淺色模式的動畫背景 */
+.light .circuit-board::after {
+  background-image: 
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 50px,
+      rgba(59, 130, 246, 0.05) 50px,
+      rgba(59, 130, 246, 0.05) 51px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 50px,
+      rgba(34, 197, 94, 0.03) 50px,
+      rgba(34, 197, 94, 0.03) 51px
+    );
 }
 
 @keyframes dataStreamBackground {
@@ -251,6 +296,27 @@ body {
   );
 }
 
+/* 主題感知漸變覆蓋層 */
+.gradient-overlay {
+  background: linear-gradient(135deg, 
+    rgba(0, 0, 0, 0.9) 0%,
+    rgba(10, 14, 26, 0.8) 25%,
+    rgba(10, 14, 26, 0.8) 75%,
+    rgba(0, 0, 0, 0.9) 100%
+  );
+}
+
+/* 淺色模式的漸變覆蓋層 */
+.light .gradient-overlay {
+  background: linear-gradient(135deg, 
+    rgba(248, 250, 252, 0.95) 0%,
+    rgba(226, 232, 240, 0.9) 25%,
+    rgba(226, 232, 240, 0.9) 75%,
+    rgba(248, 250, 252, 0.95) 100%
+  );
+}
+
+/* 保留舊類別名稱以向後兼容 */
 .gradient-overlay-dark {
   background: linear-gradient(135deg, 
     rgba(0, 0, 0, 0.9) 0%,

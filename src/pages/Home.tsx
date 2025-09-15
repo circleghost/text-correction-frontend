@@ -212,7 +212,7 @@ const Home: React.FC = () => {
     <Layout>
       <div className="full-screen-container circuit-board">
         <FloatingParticles />
-        <div className="gradient-overlay-dark">
+        <div className="gradient-overlay">
           <main className="flex flex-1 flex-col items-center justify-center py-16 px-4 sm:px-6 lg:px-8">
             <div className="w-full max-w-3xl text-center">
             {/* Hero Section */}

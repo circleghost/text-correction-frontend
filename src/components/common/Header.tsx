@@ -35,9 +35,14 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
       <div className="flex items-center gap-4">
         {/* Theme Toggle Button */}
         <button
-          onClick={toggleTheme}
-          className="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-200"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleTheme();
+          }}
+          className="relative z-30 p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 active:scale-95 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-green-400"
           title={theme === 'light' ? '切換到深色模式' : '切換到淺色模式'}
+          type="button"
         >
           {theme === 'light' ? (
             <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">

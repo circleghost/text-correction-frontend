@@ -41,8 +41,8 @@ const Dashboard: React.FC = () => {
       <DashboardNavbar />
       
       {/* Background Effects */}
-      <div className="fixed inset-0 bg-gradient-to-br from-blue-50/50 via-white to-purple-50/50 dark:from-green-900/20 dark:via-gray-900 dark:to-cyan-900/20 z-0"></div>
-      <div className="fixed inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.05),transparent_50%)] dark:bg-[radial-gradient(circle_at_50%_50%,rgba(34,197,94,0.1),transparent_50%)] z-0"></div>
+      <div className="fixed inset-0 bg-gradient-to-br from-blue-50/50 via-white to-purple-50/50 dark:from-green-900/20 dark:via-gray-900 dark:to-cyan-900/20 -z-10"></div>
+      <div className="fixed inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.05),transparent_50%)] dark:bg-[radial-gradient(circle_at_50%_50%,rgba(34,197,94,0.1),transparent_50%)] -z-10"></div>
       
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4 py-8 max-w-7xl">
