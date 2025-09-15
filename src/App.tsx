@@ -3,6 +3,7 @@ import Home from '@/pages/Home';
 import Profile from '@/pages/Profile';
 import Dashboard from '@/pages/Dashboard';
 import { AuthProvider } from '@/contexts/AuthContext';
+import { ThemeProvider } from '@/contexts/ThemeContext';
 import { AuthCallback, ProtectedRoute } from '@/components/auth';
 import { validateConfig } from '@/utils/config';
 
@@ -58,26 +59,28 @@ function App() {
   }
 
   return (
-    <AuthProvider>
-      <Router>
-        <div className='App'>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/auth/callback" element={<AuthCallback />} />
-            <Route path="/profile" element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            } />
-            <Route path="/dashboard" element={
-              <ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>
-            } />
-          </Routes>
-        </div>
-      </Router>
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <Router>
+          <div className='App'>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/auth/callback" element={<AuthCallback />} />
+              <Route path="/profile" element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              } />
+              <Route path="/dashboard" element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              } />
+            </Routes>
+          </div>
+        </Router>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 

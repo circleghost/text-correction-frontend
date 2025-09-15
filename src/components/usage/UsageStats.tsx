@@ -90,14 +90,14 @@ const UsageStats: React.FC = () => {
     icon: React.ReactNode;
     color?: string;
   }> = ({ title, value, subtitle, icon, color = 'text-green-400' }) => (
-    <div className="bg-black/20 backdrop-blur-sm border border-green-500/20 rounded-lg p-4">
+    <div className="bg-white/80 dark:bg-black/20 backdrop-blur-sm border border-gray-200 dark:border-green-500/20 rounded-lg p-4 shadow-lg dark:shadow-none">
       <div className="flex items-center justify-between mb-2">
         <div className={`${color}`}>{icon}</div>
-        <span className="text-2xl font-bold text-white">{value}</span>
+        <span className="text-2xl font-bold text-gray-800 dark:text-white">{value}</span>
       </div>
-      <h4 className="text-sm font-medium text-gray-300 mb-1">{title}</h4>
+      <h4 className="text-sm font-medium text-gray-600 dark:text-gray-300 mb-1">{title}</h4>
       {subtitle && (
-        <p className="text-xs text-gray-400">{subtitle}</p>
+        <p className="text-xs text-gray-500 dark:text-gray-400">{subtitle}</p>
       )}
     </div>
   );
@@ -111,7 +111,7 @@ const UsageStats: React.FC = () => {
         </div>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {[1, 2, 3, 4].map(i => (
-            <div key={i} className="bg-black/20 backdrop-blur-sm border border-green-500/20 rounded-lg p-4 animate-pulse">
+            <div key={i} className="bg-white/80 dark:bg-black/20 backdrop-blur-sm border border-gray-200 dark:border-green-500/20 rounded-lg p-4 animate-pulse shadow-lg dark:shadow-none">
               <div className="flex items-center justify-between mb-2">
                 <div className="w-6 h-6 bg-gray-700/50 rounded"></div>
                 <div className="w-12 h-6 bg-gray-700/50 rounded"></div>
@@ -127,17 +127,17 @@ const UsageStats: React.FC = () => {
 
   if (error) {
     return (
-      <div className="bg-black/20 backdrop-blur-sm border border-red-500/30 rounded-lg p-6">
-        <div className="flex items-center space-x-2 text-red-400 mb-2">
+      <div className="bg-white/80 dark:bg-black/20 backdrop-blur-sm border border-red-200 dark:border-red-500/30 rounded-lg p-6 shadow-lg dark:shadow-none">
+        <div className="flex items-center space-x-2 text-red-600 dark:text-red-400 mb-2">
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
           <span>無法載入使用統計</span>
         </div>
-        <p className="text-gray-400 text-sm mb-3">{error}</p>
+        <p className="text-gray-600 dark:text-gray-400 text-sm mb-3">{error}</p>
         <button
           onClick={fetchUsageStats}
-          className="text-green-400 hover:text-green-300 text-sm underline"
+          className="text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 text-sm underline"
         >
           重試
         </button>
@@ -150,11 +150,11 @@ const UsageStats: React.FC = () => {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h3 className="text-xl font-semibold text-green-400">使用統計</h3>
+        <h3 className="text-xl font-semibold text-gray-800 dark:text-green-400">使用統計</h3>
         <select
           value={period}
           onChange={(e) => setPeriod(e.target.value as any)}
-          className="bg-black/40 border border-green-500/30 text-green-400 rounded-lg px-3 py-1 text-sm focus:outline-none focus:border-green-400"
+          className="bg-white dark:bg-black/40 border border-gray-300 dark:border-green-500/30 text-gray-800 dark:text-green-400 rounded-lg px-3 py-1 text-sm focus:outline-none focus:border-blue-500 dark:focus:border-green-400 shadow-sm dark:shadow-none"
         >
           <option value="day">今日</option>
           <option value="week">本週</option>
@@ -188,7 +188,7 @@ const UsageStats: React.FC = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
           }
-          color="text-blue-400"
+          color="text-blue-600 dark:text-blue-400"
         />
 
         <StatCard
@@ -200,7 +200,7 @@ const UsageStats: React.FC = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
             </svg>
           }
-          color="text-purple-400"
+          color="text-purple-600 dark:text-purple-400"
         />
 
         <StatCard
@@ -212,7 +212,7 @@ const UsageStats: React.FC = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           }
-          color="text-yellow-400"
+          color="text-yellow-600 dark:text-yellow-400"
         />
       </div>
 
@@ -226,7 +226,7 @@ const UsageStats: React.FC = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           }
-          color={usage.totalErrors > 0 ? "text-red-400" : "text-green-400"}
+          color={usage.totalErrors > 0 ? "text-red-600 dark:text-red-400" : "text-green-600 dark:text-green-400"}
         />
 
         <StatCard
@@ -238,13 +238,13 @@ const UsageStats: React.FC = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           }
-          color="text-indigo-400"
+          color="text-indigo-600 dark:text-indigo-400"
         />
       </div>
 
       <button
         onClick={fetchUsageStats}
-        className="w-full text-center text-sm text-gray-400 hover:text-green-400 transition-colors py-2"
+        className="w-full text-center text-sm text-gray-600 dark:text-gray-400 hover:text-green-600 dark:hover:text-green-400 transition-colors py-2"
       >
         重新整理統計
       </button>

@@ -207,9 +207,9 @@ const QuotaStatus: React.FC = () => {
   }
 
   return (
-    <div className="bg-black/20 backdrop-blur-sm border border-green-500/30 rounded-lg p-6">
+    <div className="bg-white/80 dark:bg-black/20 backdrop-blur-sm border border-gray-200 dark:border-green-500/30 rounded-lg p-6 shadow-lg dark:shadow-none">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-xl font-semibold text-green-400">使用配額狀況</h3>
+        <h3 className="text-xl font-semibold text-gray-800 dark:text-green-400">使用配額狀況</h3>
         {quotas.length > 0 && (
           <span className={`text-sm font-medium ${getTierColor(quotas[0].tier)}`}>
             {quotas[0].tier.toUpperCase()} 方案
@@ -235,7 +235,7 @@ const QuotaStatus: React.FC = () => {
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                   {getStatusIcon(quota)}
-                  <span className="text-gray-200 text-sm font-medium">
+                  <span className="text-gray-800 dark:text-gray-200 text-sm font-medium">
                     {formatQuotaType(quota.type)}
                   </span>
                   {quota.isExceeded && (
@@ -290,14 +290,14 @@ const QuotaStatus: React.FC = () => {
                   {quota.isExceeded ? (
                     <span className="text-red-400 font-medium">已超出限制</span>
                   ) : (
-                    <span className="text-gray-400">
-                      剩餘 <span className="text-green-400 font-medium">{formatNumber(quota.remaining)}</span>
+                    <span className="text-gray-600 dark:text-gray-400">
+                      剩餘 <span className="text-green-600 dark:text-green-400 font-medium">{formatNumber(quota.remaining)}</span>
                     </span>
                   )}
                 </div>
                 
                 {showDetails && (
-                  <div className="text-gray-500">
+                  <div className="text-gray-500 dark:text-gray-500">
                     {quota.type === 'monthly_corrections' && '校正次數'}
                     {quota.type === 'monthly_characters' && '字元處理'}
                     {quota.type === 'monthly_requests' && '月度請求'}
@@ -329,7 +329,7 @@ const QuotaStatus: React.FC = () => {
         <div className="flex justify-between items-center">
           <button
             onClick={() => setShowDetails(!showDetails)}
-            className="text-xs text-gray-400 hover:text-green-400 transition-colors flex items-center space-x-1"
+            className="text-xs text-gray-600 dark:text-gray-400 hover:text-green-600 dark:hover:text-green-400 transition-colors flex items-center space-x-1"
           >
             <span>{showDetails ? '隱藏詳情' : '顯示詳情'}</span>
             <svg 
@@ -344,7 +344,7 @@ const QuotaStatus: React.FC = () => {
           
           <button
             onClick={fetchQuotaStatus}
-            className="text-xs text-gray-400 hover:text-green-400 transition-colors flex items-center space-x-1"
+            className="text-xs text-gray-600 dark:text-gray-400 hover:text-green-600 dark:hover:text-green-400 transition-colors flex items-center space-x-1"
           >
             <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -357,17 +357,17 @@ const QuotaStatus: React.FC = () => {
         {showDetails && quotas.length > 0 && (
           <div className="pt-3 border-t border-green-500/20">
             <div className="grid grid-cols-2 gap-3 text-xs">
-              <div className="text-center p-2 bg-black/20 rounded">
-                <div className="text-green-400 font-medium">
+              <div className="text-center p-2 bg-gray-200 dark:bg-black/20 rounded">
+                <div className="text-green-600 dark:text-green-400 font-medium">
                   {quotas.filter(q => !q.isExceeded).length}/{quotas.length}
                 </div>
-                <div className="text-gray-400">正常配額</div>
+                <div className="text-gray-600 dark:text-gray-400">正常配額</div>
               </div>
-              <div className="text-center p-2 bg-black/20 rounded">
-                <div className="text-yellow-400 font-medium">
+              <div className="text-center p-2 bg-gray-200 dark:bg-black/20 rounded">
+                <div className="text-yellow-600 dark:text-yellow-400 font-medium">
                   {quotas.filter(q => q.percentageUsed >= 80 && !q.isExceeded).length}
                 </div>
-                <div className="text-gray-400">接近上限</div>
+                <div className="text-gray-600 dark:text-gray-400">接近上限</div>
               </div>
             </div>
           </div>
