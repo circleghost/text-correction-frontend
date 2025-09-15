@@ -14,22 +14,27 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
   const { theme, toggleTheme } = useTheme();
 
   return (
-    <header className={`flex items-center justify-between whitespace-nowrap border-b border-solid border-gray-200 dark:border-[var(--secondary-color)] px-10 py-4 bg-white dark:bg-[var(--background-dark)] transition-colors duration-300 ${className}`}>
+    <header 
+      className={`flex items-center justify-between whitespace-nowrap border-b border-solid border-gray-200 dark:border-gray-700 px-10 py-4 bg-white dark:!bg-gray-900 transition-colors duration-300 ${className}`}
+      style={{
+        backgroundColor: theme === 'dark' ? '#111827' : '#ffffff'
+      }}
+    >
       <div className="flex items-center gap-3 text-2xl font-bold text-gray-800 dark:text-white">
-        <svg className="h-8 w-8 text-blue-600 dark:text-[var(--primary-color)]" fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+        <svg className="h-8 w-8 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
           <path clipRule="evenodd" d="M24 4H42V17.3333V30.6667H24V44H6V30.6667V17.3333H24V4Z" fill="currentColor" fillRule="evenodd"></path>
         </svg> 
         <div>
           <div className="text-2xl font-bold">{config.appName}</div>
-          <div className="text-sm font-medium text-gray-600 dark:text-[var(--text-secondary)]">讓文字更精準，表達更清晰</div>
+          <div className="text-sm font-medium text-gray-600 dark:text-white opacity-90 dark:opacity-100">讓文字更精準，表達更清晰</div>
         </div>
       </div>
       <nav className="hidden md:flex items-center gap-8">
-        <Link to="/" className="text-sm font-medium leading-normal text-gray-600 dark:text-[var(--text-secondary)] hover:text-blue-600 dark:hover:text-[var(--primary-color)] transition-colors">首頁</Link>
-        <a className="text-sm font-medium leading-normal text-gray-600 dark:text-[var(--text-secondary)] hover:text-blue-600 dark:hover:text-[var(--primary-color)] transition-colors" href="#">功能</a>
-        <a className="text-sm font-medium leading-normal text-gray-600 dark:text-[var(--text-secondary)] hover:text-blue-600 dark:hover:text-[var(--primary-color)] transition-colors" href="#">定價</a>
+        <Link to="/" className="text-sm font-medium leading-normal text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">首頁</Link>
+        <a className="text-sm font-medium leading-normal text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors" href="#">功能</a>
+        <a className="text-sm font-medium leading-normal text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors" href="#">定價</a>
         {user && (
-          <Link to="/dashboard" className="text-sm font-medium leading-normal text-gray-600 dark:text-[var(--text-secondary)] hover:text-blue-600 dark:hover:text-[var(--primary-color)] transition-colors">使用量</Link>
+          <Link to="/dashboard" className="text-sm font-medium leading-normal text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">使用量</Link>
         )}
       </nav>
       <div className="flex items-center gap-4">
@@ -56,7 +61,7 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
         </button>
 
         {loading ? (
-          <div className="w-8 h-8 border-2 border-gray-300 border-t-blue-600 dark:border-gray-600 dark:border-t-[var(--primary-color)] rounded-full animate-spin"></div>
+          <div className="w-8 h-8 border-2 border-gray-300 border-t-blue-600 dark:border-gray-600 dark:border-t-blue-400 rounded-full animate-spin"></div>
         ) : user ? (
           <UserProfile 
             variant="dropdown" 
@@ -72,7 +77,7 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
         )}
         
         {/* Mobile menu button */}
-        <button className="md:hidden p-2 rounded-md hover:bg-gray-200 dark:hover:bg-[var(--secondary-color)] text-gray-700 dark:text-white transition-colors">
+        <button className="md:hidden p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-white transition-colors">
           <span className="material-symbols-outlined">menu</span>
         </button>
       </div>
