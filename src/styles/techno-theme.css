@@ -91,40 +91,47 @@ body {
 /* ===== LinguaCheck 簡潔背景網格 ===== */
 .circuit-board {
   background: 
-    /* 深色模式網格線條 */
-    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    /* 深色背景 */
-    var(--background-dark);
-  background-size: 
-    40px 40px,
-    40px 40px,
-    100% 100%;
-  background-position: 
-    0 0,
-    0 0,
-    0 0;
+    /* 深色模式背景 - 更溫和的深色 */
+    linear-gradient(135deg, #1f2937 0%, #111827 50%, #0f172a 100%);
   position: relative;
   min-height: 100vh;
 }
 
-/* 淺色模式的電路板樣式 */
+/* ===== MODERN LIGHT MODE DESIGN SYSTEM ===== */
+/* 淺色模式的電路板樣式 - GitHub/Notion 風格 */
 .light .circuit-board {
-  background: 
-    /* 淺色模式網格線條 */
-    linear-gradient(rgba(100, 116, 139, 0.1) 1px, transparent 1px),
-    linear-gradient(to right, rgba(100, 116, 139, 0.1) 1px, transparent 1px),
-    /* 淺色背景漸變 */
-    linear-gradient(135deg, 
-      rgba(248, 250, 252, 0.95) 0%,
-      rgba(241, 245, 249, 0.9) 25%,
-      rgba(226, 232, 240, 0.9) 75%,
-      rgba(248, 250, 252, 0.95) 100%
-    );
-  background-size: 
-    40px 40px,
-    40px 40px,
-    100% 100%;
+  background: #FAFBFC;
+  background-image: none;
+  transition: background-color 0.3s ease;
+}
+
+/* 淺色模式的 body 樣式 */
+.light body {
+  background-color: #FAFBFC;
+  color: #1F2328;
+  transition: all 0.3s ease;
+}
+
+/* 淺色模式的文字顏色 */
+.light .glow-text-primary {
+  color: #1F2328 !important;
+  text-shadow: none !important;
+}
+
+.light .glow-text-secondary {
+  color: #656D76 !important;
+  text-shadow: none !important;
+}
+
+.light .tech-title {
+  background: linear-gradient(135deg, #1F2328, #656D76);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.light .tech-subtitle {
+  color: #656D76;
 }
 
 .circuit-board::before {
@@ -135,63 +142,30 @@ body {
   right: 0;
   bottom: 0;
   background: 
-    /* 深色模式漸層覆蓋 */
-    linear-gradient(135deg, rgba(0, 0, 0, 0.6) 0%, transparent 50%, rgba(0, 0, 0, 0.6) 100%);
+    /* 深色模式簡潔覆蓋層 */
+    linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, transparent 50%, rgba(34, 197, 94, 0.05) 100%);
   pointer-events: none;
   z-index: 1;
 }
 
-/* 淺色模式的覆蓋層 */
+/* 淺色模式的覆蓋層 - 微軟風格 */
 .light .circuit-board::before {
-  background: 
-    /* 淺色模式漸層覆蓋 */
-    linear-gradient(135deg, rgba(100, 116, 139, 0.1) 0%, transparent 50%, rgba(100, 116, 139, 0.1) 100%);
+  display: none;
 }
 
-.circuit-board::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: 
-    repeating-linear-gradient(
-      45deg,
-      transparent,
-      transparent 50px,
-      rgba(0, 212, 255, 0.03) 50px,
-      rgba(0, 212, 255, 0.03) 51px
-    ),
-    repeating-linear-gradient(
-      -45deg,
-      transparent,
-      transparent 50px,
-      rgba(57, 255, 20, 0.02) 50px,
-      rgba(57, 255, 20, 0.02) 51px
-    );
-  pointer-events: none;
-  z-index: 0;
-  animation: dataStreamBackground 20s linear infinite;
-}
-
-/* 淺色模式的動畫背景 */
+/* 淺色模式移除動畫背景 - 微軟風格 */
 .light .circuit-board::after {
-  background-image: 
-    repeating-linear-gradient(
-      45deg,
-      transparent,
-      transparent 50px,
-      rgba(59, 130, 246, 0.05) 50px,
-      rgba(59, 130, 246, 0.05) 51px
-    ),
-    repeating-linear-gradient(
-      -45deg,
-      transparent,
-      transparent 50px,
-      rgba(34, 197, 94, 0.03) 50px,
-      rgba(34, 197, 94, 0.03) 51px
-    );
+  display: none;
+}
+
+/* 深色模式移除動畫背景 */
+.dark .circuit-board::after {
+  display: none;
+}
+
+@keyframes lightModePattern {
+  0% { transform: translateX(0) translateY(0); }
+  100% { transform: translateX(60px) translateY(60px); }
 }
 
 @keyframes dataStreamBackground {
@@ -288,32 +262,18 @@ body {
 
 /* ===== GRADIENT OVERLAYS ===== */
 .gradient-overlay {
-  background: linear-gradient(135deg, 
-    rgba(0, 212, 255, 0.15) 0%,
-    transparent 30%,
-    transparent 70%,
-    rgba(57, 255, 20, 0.15) 100%
-  );
+  /* 深色模式：簡潔的半透明覆蓋層 */
+  background: rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 2;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-/* 主題感知漸變覆蓋層 */
-.gradient-overlay {
-  background: linear-gradient(135deg, 
-    rgba(0, 0, 0, 0.9) 0%,
-    rgba(10, 14, 26, 0.8) 25%,
-    rgba(10, 14, 26, 0.8) 75%,
-    rgba(0, 0, 0, 0.9) 100%
-  );
-}
-
-/* 淺色模式的漸變覆蓋層 */
+/* 淺色模式的漸變覆蓋層 - 微軟風格 */
 .light .gradient-overlay {
-  background: linear-gradient(135deg, 
-    rgba(248, 250, 252, 0.95) 0%,
-    rgba(226, 232, 240, 0.9) 25%,
-    rgba(226, 232, 240, 0.9) 75%,
-    rgba(248, 250, 252, 0.95) 100%
-  );
+  background: transparent;
 }
 
 /* 保留舊類別名稱以向後兼容 */
@@ -367,10 +327,40 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+/* 淺色模式的 glass 樣式 - 現代白色卡片 */
+.light .glass {
+  background: #FFFFFF;
+  backdrop-filter: none;
+  border: 1px solid #D0D7DE;
+  box-shadow: 0 1px 3px rgba(31, 35, 40, 0.12), 0 0 0 1px rgba(31, 35, 40, 0.04);
+  border-radius: 6px;
+  transition: all 0.15s ease;
+}
+
+.light .glass:hover {
+  box-shadow: 0 4px 12px rgba(31, 35, 40, 0.08), 0 0 0 1px rgba(31, 35, 40, 0.04);
+  border-color: #9199A1;
+}
+
 .glass-strong {
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* 淺色模式的 glass-strong 樣式 - 現代白色 */
+.light .glass-strong {
+  background: #FFFFFF;
+  backdrop-filter: none;
+  border: 1px solid #9199A1;
+  box-shadow: 0 8px 24px rgba(31, 35, 40, 0.04), 0 0 0 1px rgba(31, 35, 40, 0.04);
+  border-radius: 6px;
+  transition: all 0.15s ease;
+}
+
+.light .glass-strong:hover {
+  box-shadow: 0 8px 24px rgba(31, 35, 40, 0.08), 0 0 0 1px rgba(31, 35, 40, 0.08);
+  border-color: #656D76;
 }
 
 /* ===== ANIMATIONS ===== */
@@ -689,6 +679,97 @@ body {
   animation: slide-right 2s linear infinite;
 }
 
+/* ===== LIGHT MODE STATUS INDICATORS ===== */
+.light .status-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  position: relative;
+  box-shadow: none;
+}
+
+.light .status-dot.success {
+  background: #1A7F37;
+  box-shadow: 0 0 0 2px rgba(26, 127, 55, 0.1);
+}
+
+.light .status-dot.success::before {
+  background: #1A7F37;
+  box-shadow: 0 0 0 4px rgba(26, 127, 55, 0.1);
+}
+
+.light .status-dot.processing {
+  background: #0969DA;
+  box-shadow: 0 0 0 2px rgba(9, 105, 218, 0.1);
+  animation: lightModePulse 1s ease-in-out infinite;
+}
+
+.light .status-dot.processing::before {
+  background: #0969DA;
+  box-shadow: 0 0 0 4px rgba(9, 105, 218, 0.1);
+}
+
+.light .status-dot.error {
+  background: #CF222E;
+  box-shadow: 0 0 0 2px rgba(207, 34, 46, 0.1);
+}
+
+.light .status-dot.error::before {
+  background: #CF222E;
+  box-shadow: 0 0 0 4px rgba(207, 34, 46, 0.1);
+}
+
+@keyframes lightModePulse {
+  0%, 100% {
+    box-shadow: 0 0 0 2px rgba(9, 105, 218, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 0 2px rgba(9, 105, 218, 0.2);
+  }
+}
+
+/* ===== LIGHT MODE NEON INPUT ===== */
+.light .neon-input {
+  background: #FFFFFF;
+  border: 1px solid #D0D7DE;
+  color: #1F2328;
+  border-radius: 6px;
+  transition: all 0.15s ease;
+  backdrop-filter: none;
+  box-shadow: 0 1px 3px rgba(31, 35, 40, 0.12);
+}
+
+.light .neon-input:hover {
+  border-color: #9199A1;
+  box-shadow: 0 1px 3px rgba(31, 35, 40, 0.12);
+}
+
+.light .neon-input--primary:focus,
+.light .neon-input--primary.neon-input--focused {
+  border-color: #0969DA;
+  box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.1);
+  text-shadow: none;
+}
+
+.light .neon-input--secondary:focus,
+.light .neon-input--secondary.neon-input--focused {
+  border-color: #1A7F37;
+  box-shadow: 0 0 0 3px rgba(26, 127, 55, 0.1);
+  text-shadow: none;
+}
+
+.light .neon-input--danger:focus,
+.light .neon-input--danger.neon-input--focused {
+  border-color: #CF222E;
+  box-shadow: 0 0 0 3px rgba(207, 34, 46, 0.1);
+  text-shadow: none;
+}
+
+.light .neon-input::placeholder {
+  color: #9199A1;
+  opacity: 1;
+}
+
 /* ===== STATUS INDICATORS ===== */
 .status-dot {
   width: 12px;
@@ -859,6 +940,107 @@ body {
   padding: 1.5rem;
   position: relative;
   overflow: hidden;
+}
+
+/* 淺色模式的 tech-card 樣式 - 簡約白色 */
+.light .tech-card {
+  background: #FFFFFF;
+  backdrop-filter: none;
+  border: 1px solid #D0D7DE;
+  box-shadow: 
+    0 1px 3px rgba(31, 35, 40, 0.12);
+  border-radius: 12px;
+}
+
+/* 簡約按鈕樣式 */
+.light .tech-button,
+.light .pulse-button,
+.light .scan-button,
+.light .neon-button,
+.light .neon-button--primary {
+  background: #111215 !important;
+  border: 1px solid #111215 !important;
+  border-radius: 8px !important;
+  color: #ffffff !important;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+.light .tech-button:hover,
+.light .pulse-button:hover,
+.light .scan-button:hover,
+.light .neon-button:hover,
+.light .neon-button--primary:hover {
+  background: #2a2b30 !important;
+  border-color: #2a2b30 !important;
+  transform: none !important;
+  box-shadow: 0 2px 8px rgba(17, 18, 21, 0.15) !important;
+}
+
+.light .tech-button:active,
+.light .pulse-button:active,
+.light .scan-button:active,
+.light .neon-button:active,
+.light .neon-button--primary:active {
+  background: #000000 !important;
+  border-color: #000000 !important;
+  transform: none !important;
+}
+
+/* 次要按鈕樣式 */
+.light .tech-button[variant="secondary"],
+.light .scan-button[variant="secondary"],
+.light .neon-button--secondary {
+  background: #f5f5f5 !important;
+  border: 1px solid #e0e0e0 !important;
+  color: #111215 !important;
+}
+
+.light .tech-button[variant="secondary"]:hover,
+.light .scan-button[variant="secondary"]:hover,
+.light .neon-button--secondary:hover {
+  background: #eeeeee !important;
+  border-color: #d0d0d0 !important;
+}
+
+/* 危險按鈕樣式 */
+.light .neon-button--danger {
+  background: #e74c3c !important;
+  border: 1px solid #e74c3c !important;
+  color: #ffffff !important;
+  text-shadow: none !important;
+}
+
+.light .neon-button--danger:hover {
+  background: #c0392b !important;
+  border-color: #c0392b !important;
+}
+
+/* 簡約輸入框樣式 */
+.light .tech-input,
+.light textarea {
+  background: #f5f5f5;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  color: #111215;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
+  transition: all 0.2s ease;
+}
+
+.light .tech-input:hover,
+.light textarea:hover {
+  border-color: #d0d0d0;
+  background: #f0f0f0;
+}
+
+.light .tech-input:focus,
+.light textarea:focus {
+  border-color: #111215;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(17, 18, 21, 0.1);
+  background: #ffffff;
 }
 
 .tech-card::before {
@@ -1516,6 +1698,55 @@ body {
 
 .neon-input--primary.neon-input--focused {
   animation: inputFocusGlow 0.3s ease-out;
+}
+
+/* ===== LIGHT MODE PROGRESS BAR ===== */
+.light .tech-progress-bar {
+  background: #F6F8FA;
+  border: 1px solid #D0D7DE;
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: inset 0 1px 2px rgba(31, 35, 40, 0.04);
+}
+
+.light .tech-progress-fill {
+  background: linear-gradient(90deg, #1F2328, #656D76);
+  box-shadow: none;
+  position: relative;
+  overflow: hidden;
+  border-radius: 6px;
+}
+
+.light .neon-progress {
+  background: #F6F8FA;
+  border: 1px solid #D0D7DE;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.light .neon-progress-fill {
+  background: linear-gradient(90deg, #1F2328, #656D76);
+  border-radius: inherit;
+  overflow: hidden;
+  z-index: 2;
+}
+
+.light .neon-progress-fill--secondary {
+  background: linear-gradient(90deg, #0969DA, #0550AE);
+}
+
+.light .neon-progress-fill--success {
+  background: linear-gradient(90deg, #1A7F37, #116329);
+}
+
+.light .neon-progress-fill--danger {
+  background: linear-gradient(90deg, #CF222E, #A40E26);
+}
+
+.light .neon-progress-percentage {
+  color: #1F2328;
+  text-shadow: none;
 }
 
 /* ===== NEON PROGRESS BAR COMPONENTS ===== */

@@ -6,9 +6,12 @@ import FloatingParticles from '@/components/FloatingParticles';
 import { useTextCorrectionStore, useInputText, useGoogleDocsUrl, useInputMethod, useIsCompleted, useParagraphs, useProcessingProgress } from '@/stores/textCorrectionStore';
 import { apiService } from '@/services/api';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useAuth } from '@/hooks/useAuth';
+import { LoginButton } from '@/components/auth';
 
 const Home: React.FC = () => {
   const { theme } = useTheme();
+  const { user, isAuthenticated, loading: authLoading } = useAuth();
   const inputMethod = useInputMethod();
   const inputText = useInputText();
   const googleDocsUrl = useGoogleDocsUrl();
@@ -68,6 +71,14 @@ const Home: React.FC = () => {
   const handleStartProcessing = async () => {
     console.group(`%c🎬 User Started Processing`, 'color: #E91E63; font-weight: bold; font-size: 16px;');
     console.log('🎯 Input Method:', inputMethod);
+    
+    // Check authentication first
+    if (!isAuthenticated) {
+      console.warn('❌ User not authenticated');
+      alert('請先登入才能使用文字校正功能');
+      console.groupEnd();
+      return;
+    }
     
     if (inputMethod === 'direct') {
       console.log('📝 Direct Text Input:');
@@ -182,9 +193,9 @@ const Home: React.FC = () => {
     }
   };
 
-  const canStartProcessing = inputMethod === 'direct' 
+  const canStartProcessing = isAuthenticated && (inputMethod === 'direct' 
     ? inputText.trim().length >= 10 
-    : googleDocsUrl.trim().length > 0;
+    : googleDocsUrl.trim().length > 0);
 
   const isProcessingActive = isProcessingStarted || showProcessingScramble || showGoogleDocsAnimation || isGoogleDocsLoading || (progress > 0 && progress < 100);
 
@@ -217,10 +228,18 @@ const Home: React.FC = () => {
             <div className="w-full max-w-3xl text-center">
             {/* Hero Section */}
             <div className="text-center mb-12">
-              <h1 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tighter mb-4 glowing-text">
+              <h1 className={`text-4xl sm:text-5xl font-bold tracking-tight mb-4 ${
+                theme === 'dark' 
+                  ? 'text-white glowing-text' 
+                  : 'text-[#111215]'
+              }`}>
                 讓您的中文寫作更加精準
               </h1>
-              <p className="max-w-2xl mx-auto text-lg mb-10" style={{color: 'var(--text-secondary)'}}>
+              <p className={`max-w-2xl mx-auto text-lg mb-10 ${
+                theme === 'dark' 
+                  ? 'text-gray-300' 
+                  : 'text-[#6B6B6B]'
+              }`}>
                 貼上您的文字或從 Google Docs 匯入，識別並修正中文寫作中的錯誤。我們的 AI 工具確保您的文字準確且精煉。
               </p>
             </div>
@@ -252,11 +271,17 @@ const Home: React.FC = () => {
                 >
                   <div className="tech-card glass">
                     <div className="p-6">
-                      <div className="mb-4 text-lg font-semibold flex items-center gap-2" style={{color: 'var(--primary-color)'}}>
+                      <div className="mb-4 text-lg font-semibold flex items-center gap-2" style={{
+                        color: theme === 'light' ? '#1F2328' : 'var(--primary-color)'
+                      }}>
                         <span>🔍</span> 正在分析文本資料流...（處理模式）
                         <div className="w-4 h-4 border-2 border-current/30 border-t-current rounded-full animate-spin"></div>
                       </div>
-                      <div className="bg-gray-900/20 backdrop-blur-sm border border-gray-700/50 rounded-lg p-4">
+                      <div className={`backdrop-blur-sm rounded-lg p-4 ${
+                        theme === 'light' 
+                          ? 'bg-[#F6F8FA] border border-[#D0D7DE]' 
+                          : 'bg-gray-900/20 border border-gray-700/50'
+                      }`}>
                         {(() => {
                           // Get the text to animate - either from direct input or Google Docs
                           const animationText = inputMethod === 'google-docs' ? googleDocsText : inputText;
@@ -307,7 +332,9 @@ const Home: React.FC = () => {
                           // If no text available, show loading message
                           if (!animationText) {
                             return (
-                              <div className="text-sm leading-relaxed text-gray-400">
+                              <div className={`text-sm leading-relaxed ${
+                                theme === 'light' ? 'text-[#6B6B6B]' : 'text-gray-400'
+                              }`}>
                                 {inputMethod === 'google-docs' ? 
                                   '正在獲取 Google Docs 內容...' : 
                                   '等待文字輸入...'}
@@ -369,7 +396,18 @@ const Home: React.FC = () => {
             </div>
 
             {/* 【區塊 D：處理按鈕區】Processing Button */}
-            <div className="flex justify-center items-center w-full mb-8 gap-4">
+            <div className="flex flex-col justify-center items-center w-full mb-8 gap-4">
+              {!isAuthenticated && !authLoading && (
+                <div className="text-center mb-4">
+                  <p className={`text-sm mb-3 ${
+                    theme === 'dark' ? 'text-gray-300' : 'text-[#6B6B6B]'
+                  }`}>
+                    請先登入以使用文字校正功能
+                  </p>
+                  <LoginButton />
+                </div>
+              )}
+              
               <PulseButton 
                 onClick={handleStartProcessing}
                 disabled={!canStartProcessing || isProcessingActive}
@@ -392,6 +430,8 @@ const Home: React.FC = () => {
                       處理中...
                     </span>
                   )
+                ) : !isAuthenticated ? (
+                  '請先登入'
                 ) : (
                   inputMethod === 'google-docs' ? '處理 Google Doc' : '檢查文字'
                 )}
@@ -404,11 +444,13 @@ const Home: React.FC = () => {
             {isCompleted && paragraphs.length > 0 && !showProcessingScramble && !showGoogleDocsAnimation && (
               <div id="result-section" className="mb-8">
                 <div className="tech-card glass">
-                  <div className="p-6" style={{borderBottom: '1px solid var(--secondary-color)'}}>
+                  <div className="p-6" style={{
+                    borderBottom: theme === 'light' ? '1px solid #e1e5e9' : '1px solid var(--secondary-color)'
+                  }}>
                     <div className="flex items-center justify-between">
                       <h3 className="text-xl font-semibold flex items-center">
                         <div className="status-dot success mr-3"></div>
-                        <span style={{color: 'var(--text-secondary)'}}>分析完成！以下展示校正結果</span>
+                        <span style={{color: theme === 'light' ? '#111215' : 'var(--text-secondary)'}}>分析完成！以下展示校正結果</span>
                       </h3>
                       <div className="flex gap-3">
                         <ScanButton
@@ -476,10 +518,12 @@ const Home: React.FC = () => {
 
             {/* 【區塊 F：演示模式區】Demo Section */}
             <div className="tech-card glass">
-              <div className="p-6" style={{borderBottom: '1px solid var(--secondary-color)'}}>
+              <div className="p-6" style={{
+                borderBottom: theme === 'light' ? '1px solid #e1e5e9' : '1px solid var(--secondary-color)'
+              }}>
                 <div className="flex items-center justify-between">
                   <h3 className="text-xl font-semibold">
-                    <span style={{color: 'var(--text-secondary)'}}>演示模式</span>
+                    <span style={{color: theme === 'light' ? '#111215' : 'var(--text-secondary)'}}>演示模式</span>
                   </h3>
                   <ScanButton
                     variant={showDemo ? "danger" : "primary"}
@@ -503,11 +547,17 @@ const Home: React.FC = () => {
                 <div className="p-6">
                   {isAnalyzing ? (
                     <div className="space-y-6">
-                      <p className="mb-4 text-sm" style={{color: 'var(--text-secondary)'}}>
+                      <p className="mb-4 text-sm" style={{color: theme === 'light' ? '#6B6B6B' : 'var(--text-secondary)'}}>
                         <span>🔍</span> 正在分析文本資料流...（演示模式）
                       </p>
-                      <div className="bg-gray-900/20 backdrop-blur-sm border border-gray-700/50 rounded-lg p-4">
-                        <div className="text-sm leading-relaxed text-gray-200">
+                      <div className={`backdrop-blur-sm rounded-lg p-4 ${
+                        theme === 'light' 
+                          ? 'bg-[#f5f5f5] border border-[#e0e0e0]' 
+                          : 'bg-gray-900/20 border border-gray-700/50'
+                      }`}>
+                        <div className={`text-sm leading-relaxed ${
+                          theme === 'light' ? 'text-[#111215]' : 'text-gray-200'
+                        }`}>
                           <ScrambledTextEffect 
                             text={demoOriginal}
                             duration={3000}
@@ -519,19 +569,25 @@ const Home: React.FC = () => {
                         </div>
                       </div>
                       <div className="flex items-center justify-center">
-                        <div className="flex items-center gap-2 text-blue-400">
-                          <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
+                        <div className={`flex items-center gap-2 ${theme === 'light' ? 'text-blue-600' : 'text-blue-400'}`}>
+                          <div className={`w-2 h-2 rounded-full animate-pulse ${theme === 'light' ? 'bg-blue-600' : 'bg-blue-400'}`}></div>
                           <span className="text-sm">AI 正在處理文字差異...</span>
                         </div>
                       </div>
                     </div>
                   ) : analysisComplete ? (
                     <div className="space-y-6">
-                      <p className="mb-4 text-sm" style={{color: 'var(--text-secondary)'}}>
+                      <p className="mb-4 text-sm" style={{color: theme === 'light' ? '#6B6B6B' : 'var(--text-secondary)'}}>
                         <span>✨</span> 分析完成！以下展示修正結果
                       </p>
-                      <div className="bg-gray-900/20 backdrop-blur-sm border border-gray-700/50 rounded-lg p-4">
-                        <div className="text-sm leading-relaxed text-gray-200">
+                      <div className={`backdrop-blur-sm rounded-lg p-4 ${
+                        theme === 'light' 
+                          ? 'bg-[#f5f5f5] border border-[#e0e0e0]' 
+                          : 'bg-gray-900/20 border border-gray-700/50'
+                      }`}>
+                        <div className={`text-sm leading-relaxed ${
+                          theme === 'light' ? 'text-[#111215]' : 'text-gray-200'
+                        }`}>
                           <TextShuffleEffect 
                             originalText={demoOriginal}
                             targetText={demoCorrected}
@@ -557,7 +613,7 @@ const Home: React.FC = () => {
                     </div>
                   ) : (
                     <div className="space-y-6">
-                      <p className="mb-4 text-sm" style={{color: 'var(--text-secondary)'}}>
+                      <p className="mb-4 text-sm" style={{color: theme === 'light' ? '#6B6B6B' : 'var(--text-secondary)'}}>
                         <span>▶</span> 點擊『啟動演示』開始文字流分析特效
                       </p>
                     </div>
