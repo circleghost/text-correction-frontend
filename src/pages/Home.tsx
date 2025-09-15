@@ -5,8 +5,10 @@ import NeonButton, { PulseButton, ScanButton } from '@/components/NeonButton';
 import FloatingParticles from '@/components/FloatingParticles';
 import { useTextCorrectionStore, useInputText, useGoogleDocsUrl, useInputMethod, useIsCompleted, useParagraphs, useProcessingProgress } from '@/stores/textCorrectionStore';
 import { apiService } from '@/services/api';
+import { useTheme } from '@/contexts/ThemeContext';
 
 const Home: React.FC = () => {
+  const { theme } = useTheme();
   const inputMethod = useInputMethod();
   const inputText = useInputText();
   const googleDocsUrl = useGoogleDocsUrl();

@@ -16,7 +16,7 @@ export const Layout: React.FC<LayoutProps> = ({
   showFooter = true 
 }) => {
   return (
-    <div className='min-h-screen flex flex-col bg-[#000000]'>
+    <div className='min-h-screen flex flex-col bg-white dark:bg-[#000000] transition-colors duration-300'>
       {showHeader && <Header />}
       
       <main className={`flex-1 ${className}`}>
