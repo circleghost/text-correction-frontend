@@ -1,5 +1,6 @@
 import React from 'react';
 import { QuotaStatus, UsageStats, UsageHistory } from '@/components/usage';
+import UsageTrendsChart from '@/components/usage/UsageTrendsChart';
 import { useAuth } from '@/contexts/AuthContext';
 
 const Dashboard: React.FC = () => {
@@ -63,6 +64,11 @@ const Dashboard: React.FC = () => {
             {/* Usage Statistics */}
             <div>
               <UsageStats />
+            </div>
+
+            {/* Usage Trends Chart */}
+            <div>
+              <UsageTrendsChart />
             </div>
           </div>
 

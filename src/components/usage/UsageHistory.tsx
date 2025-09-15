@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { format, parseISO, subDays, isAfter, isBefore } from 'date-fns';
+import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Cell } from 'recharts';
 import { apiService } from '@/services/api';
 
 interface UsageHistoryEntry {
@@ -23,6 +25,17 @@ const UsageHistory: React.FC = () => {
     offset: 0,
     hasMore: false
   });
+  
+  // Enhanced filtering state
+  const [filters, setFilters] = useState({
+    actionType: 'all',
+    dateRange: 'all',
+    searchText: '',
+    showErrors: false
+  });
+  
+  const [showFilters, setShowFilters] = useState(false);
+  const [viewMode, setViewMode] = useState<'list' | 'chart'>('list');
 
   useEffect(() => {
     fetchUsageHistory();
@@ -114,6 +127,107 @@ const UsageHistory: React.FC = () => {
     setHistory([]);
   };
 
+  // Enhanced filtering and utility functions
+  const getFilteredHistory = () => {
+    return history.filter(entry => {
+      // Action type filter
+      if (filters.actionType !== 'all' && entry.actionType !== filters.actionType) {
+        return false;
+      }
+      
+      // Error filter
+      if (filters.showErrors && !entry.errorCode) {
+        return false;
+      }
+      
+      // Date range filter
+      if (filters.dateRange !== 'all') {
+        const entryDate = entry.createdAt;
+        const now = new Date();
+        let dateThreshold;
+        
+        switch (filters.dateRange) {
+          case 'today':
+            dateThreshold = subDays(now, 1);
+            break;
+          case 'week':
+            dateThreshold = subDays(now, 7);
+            break;
+          case 'month':
+            dateThreshold = subDays(now, 30);
+            break;
+          default:
+            dateThreshold = null;
+        }
+        
+        if (dateThreshold && isBefore(entryDate, dateThreshold)) {
+          return false;
+        }
+      }
+      
+      // Text search filter
+      if (filters.searchText) {
+        const searchLower = filters.searchText.toLowerCase();
+        const actionType = formatActionType(entry.actionType).toLowerCase();
+        const featureUsed = entry.featureUsed?.toLowerCase() || '';
+        
+        if (!actionType.includes(searchLower) && !featureUsed.includes(searchLower)) {
+          return false;
+        }
+      }
+      
+      return true;
+    });
+  };
+
+  const getChartData = () => {
+    const filteredHistory = getFilteredHistory();
+    const dailyData = new Map();
+    
+    filteredHistory.forEach(entry => {
+      const date = format(entry.createdAt, 'MM/dd');
+      const existing = dailyData.get(date) || { date, requests: 0, characters: 0, avgTime: 0, times: [] };
+      
+      existing.requests++;
+      existing.characters += entry.textLength;
+      if (entry.processingTimeMs) {
+        existing.times.push(entry.processingTimeMs);
+      }
+      
+      dailyData.set(date, existing);
+    });
+    
+    return Array.from(dailyData.values()).map(item => ({
+      ...item,
+      avgTime: item.times.length > 0 ? item.times.reduce((a, b) => a + b, 0) / item.times.length : 0
+    })).slice(-7); // Last 7 days
+  };
+
+  const exportToCSV = () => {
+    const filteredHistory = getFilteredHistory();
+    const headers = ['時間', '動作類型', '字元數', 'Token 使用', '處理時間', '狀態', '功能', '錯誤代碼'];
+    
+    const csvContent = [
+      headers.join(','),
+      ...filteredHistory.map(entry => [
+        formatDateTime(entry.createdAt),
+        formatActionType(entry.actionType),
+        entry.textLength,
+        entry.tokensUsed || 0,
+        formatProcessingTime(entry.processingTimeMs),
+        entry.errorCode ? '失敗' : '成功',
+        entry.featureUsed || '',
+        entry.errorCode || ''
+      ].join(','))
+    ].join('\n');
+    
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `usage_history_${format(new Date(), 'yyyy-MM-dd')}.csv`;
+    link.click();
+  };
+
   if (loading && history.length === 0) {
     return (
       <div className="bg-black/20 backdrop-blur-sm border border-green-500/30 rounded-lg p-6">
@@ -159,17 +273,123 @@ const UsageHistory: React.FC = () => {
 
   return (
     <div className="bg-black/20 backdrop-blur-sm border border-green-500/30 rounded-lg p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h3 className="text-xl font-semibold text-green-400">使用歷史</h3>
-        <button
-          onClick={handleRefresh}
-          className="text-green-400 hover:text-green-300 text-sm flex items-center space-x-1"
-        >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-          </svg>
-          <span>重新整理</span>
-        </button>
+      <div className="space-y-4 mb-6">
+        {/* Header with controls */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <h3 className="text-xl font-semibold text-green-400">使用歷史</h3>
+          
+          <div className="flex flex-wrap gap-2">
+            {/* View mode toggle */}
+            <div className="flex bg-black/40 rounded-lg p-1">
+              <button
+                onClick={() => setViewMode('list')}
+                className={`px-3 py-1 rounded text-xs ${viewMode === 'list' ? 'bg-green-600 text-white' : 'text-green-400 hover:text-green-300'}`}
+              >
+                列表
+              </button>
+              <button
+                onClick={() => setViewMode('chart')}
+                className={`px-3 py-1 rounded text-xs ${viewMode === 'chart' ? 'bg-green-600 text-white' : 'text-green-400 hover:text-green-300'}`}
+              >
+                圖表
+              </button>
+            </div>
+            
+            {/* Filter toggle */}
+            <button
+              onClick={() => setShowFilters(!showFilters)}
+              className="text-green-400 hover:text-green-300 text-sm flex items-center space-x-1 px-2 py-1 rounded"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.414A1 1 0 013 6.707V4z" />
+              </svg>
+              <span>篩選</span>
+            </button>
+            
+            {/* Export button */}
+            <button
+              onClick={exportToCSV}
+              className="text-green-400 hover:text-green-300 text-sm flex items-center space-x-1 px-2 py-1 rounded"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+              </svg>
+              <span>匯出</span>
+            </button>
+            
+            {/* Refresh button */}
+            <button
+              onClick={handleRefresh}
+              className="text-green-400 hover:text-green-300 text-sm flex items-center space-x-1 px-2 py-1 rounded"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+              <span>重新整理</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Filter Panel */}
+        {showFilters && (
+          <div className="bg-black/30 rounded-lg p-4 space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              {/* Search */}
+              <div>
+                <label className="block text-xs font-medium text-gray-400 mb-1">搜尋</label>
+                <input
+                  type="text"
+                  value={filters.searchText}
+                  onChange={(e) => setFilters(prev => ({ ...prev, searchText: e.target.value }))}
+                  placeholder="搜尋動作或功能..."
+                  className="w-full bg-black/40 border border-green-500/30 text-green-400 rounded px-3 py-1 text-sm focus:outline-none focus:border-green-400"
+                />
+              </div>
+              
+              {/* Action Type Filter */}
+              <div>
+                <label className="block text-xs font-medium text-gray-400 mb-1">動作類型</label>
+                <select
+                  value={filters.actionType}
+                  onChange={(e) => setFilters(prev => ({ ...prev, actionType: e.target.value }))}
+                  className="w-full bg-black/40 border border-green-500/30 text-green-400 rounded px-3 py-1 text-sm focus:outline-none focus:border-green-400"
+                >
+                  <option value="all">全部</option>
+                  <option value="correction_request">文字校正</option>
+                  <option value="text_processed">文字處理</option>
+                  <option value="api_call">API 呼叫</option>
+                </select>
+              </div>
+              
+              {/* Date Range Filter */}
+              <div>
+                <label className="block text-xs font-medium text-gray-400 mb-1">時間範圍</label>
+                <select
+                  value={filters.dateRange}
+                  onChange={(e) => setFilters(prev => ({ ...prev, dateRange: e.target.value }))}
+                  className="w-full bg-black/40 border border-green-500/30 text-green-400 rounded px-3 py-1 text-sm focus:outline-none focus:border-green-400"
+                >
+                  <option value="all">全部</option>
+                  <option value="today">今日</option>
+                  <option value="week">本週</option>
+                  <option value="month">本月</option>
+                </select>
+              </div>
+              
+              {/* Error filter */}
+              <div className="flex items-center space-x-2 pt-5">
+                <input
+                  type="checkbox"
+                  id="showErrors"
+                  checked={filters.showErrors}
+                  onChange={(e) => setFilters(prev => ({ ...prev, showErrors: e.target.checked }))}
+                  className="rounded border-green-500/30 bg-black/40 text-green-600 focus:ring-green-400"
+                />
+                <label htmlFor="showErrors" className="text-xs text-gray-400">只顯示錯誤</label>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {history.length === 0 && !loading ? (
@@ -181,8 +401,68 @@ const UsageHistory: React.FC = () => {
           <p className="text-gray-500 text-sm mt-1">開始使用服務後，這裡會顯示您的使用歷史</p>
         </div>
       ) : (
-        <div className="space-y-3">
-          {history.map((entry) => (
+        <div>
+          {viewMode === 'chart' ? (
+            /* Chart View */
+            <div className="space-y-6">
+              {/* Summary Stats */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="bg-black/30 rounded-lg p-3 text-center">
+                  <div className="text-lg font-semibold text-green-400">{getFilteredHistory().length}</div>
+                  <div className="text-xs text-gray-400">總記錄</div>
+                </div>
+                <div className="bg-black/30 rounded-lg p-3 text-center">
+                  <div className="text-lg font-semibold text-blue-400">{getFilteredHistory().filter(e => !e.errorCode).length}</div>
+                  <div className="text-xs text-gray-400">成功</div>
+                </div>
+                <div className="bg-black/30 rounded-lg p-3 text-center">
+                  <div className="text-lg font-semibold text-red-400">{getFilteredHistory().filter(e => e.errorCode).length}</div>
+                  <div className="text-xs text-gray-400">失敗</div>
+                </div>
+                <div className="bg-black/30 rounded-lg p-3 text-center">
+                  <div className="text-lg font-semibold text-yellow-400">
+                    {getFilteredHistory().reduce((sum, e) => sum + e.textLength, 0).toLocaleString()}
+                  </div>
+                  <div className="text-xs text-gray-400">總字元</div>
+                </div>
+              </div>
+              
+              {/* Usage Chart */}
+              <div className="bg-black/30 rounded-lg p-4">
+                <h4 className="text-lg font-semibold text-green-400 mb-4">每日使用趨勢</h4>
+                <ResponsiveContainer width="100%" height={200}>
+                  <BarChart data={getChartData()}>
+                    <XAxis dataKey="date" stroke="#9ca3af" fontSize={12} />
+                    <YAxis stroke="#9ca3af" fontSize={12} />
+                    <Bar dataKey="requests" radius={[2, 2, 0, 0]}>
+                      {getChartData().map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill="#10b981" />
+                      ))}
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+              
+              {/* Processing Time Chart */}
+              <div className="bg-black/30 rounded-lg p-4">
+                <h4 className="text-lg font-semibold text-green-400 mb-4">平均處理時間</h4>
+                <ResponsiveContainer width="100%" height={150}>
+                  <BarChart data={getChartData()}>
+                    <XAxis dataKey="date" stroke="#9ca3af" fontSize={12} />
+                    <YAxis stroke="#9ca3af" fontSize={12} />
+                    <Bar dataKey="avgTime" radius={[2, 2, 0, 0]}>
+                      {getChartData().map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill="#f59e0b" />
+                      ))}
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          ) : (
+            /* List View */
+            <div className="space-y-3">
+              {getFilteredHistory().map((entry) => (
             <div key={entry.id} className="flex items-center space-x-4 p-3 bg-black/20 border border-green-500/10 rounded-lg hover:border-green-500/30 transition-colors">
               <div className="flex-shrink-0">
                 {getStatusIcon(entry)}
@@ -228,20 +508,22 @@ const UsageHistory: React.FC = () => {
             </div>
           )}
           
-          {pagination.hasMore && !loading && (
-            <div className="text-center pt-4">
-              <button
-                onClick={handleLoadMore}
-                className="text-green-400 hover:text-green-300 text-sm underline"
-              >
-                載入更多 ({pagination.total - history.length} 筆記錄)
-              </button>
-            </div>
-          )}
-          
-          {!pagination.hasMore && history.length > 0 && (
-            <div className="text-center pt-4 text-gray-500 text-xs">
-              已顯示全部 {history.length} 筆記錄
+              {pagination.hasMore && !loading && (
+                <div className="text-center pt-4">
+                  <button
+                    onClick={handleLoadMore}
+                    className="text-green-400 hover:text-green-300 text-sm underline"
+                  >
+                    載入更多 ({pagination.total - getFilteredHistory().length} 筆記錄)
+                  </button>
+                </div>
+              )}
+              
+              {!pagination.hasMore && getFilteredHistory().length > 0 && (
+                <div className="text-center pt-4 text-gray-500 text-xs">
+                  已顯示全部 {getFilteredHistory().length} 筆記錄
+                </div>
+              )}
             </div>
           )}
         </div>
