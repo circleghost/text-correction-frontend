@@ -15,7 +15,7 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
 
   return (
     <header 
-      className={`flex items-center justify-between whitespace-nowrap border-b border-solid border-gray-200 dark:border-[var(--secondary-color)] px-10 py-4 bg-white dark:bg-[var(--background-dark)] transition-colors duration-300 ${className}`}
+      className={`flex items-center justify-between whitespace-nowrap border-b border-solid border-gray-200 dark:border-gray-800 px-10 py-4 bg-white dark:bg-gray-950 transition-colors duration-300 ${className}`}
     >
       <div className="flex items-center gap-3 text-2xl font-bold text-gray-800 dark:text-white">
         <svg className="h-8 w-8 text-blue-600 dark:text-cyan-400" fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
@@ -23,15 +23,15 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
         </svg> 
         <div>
           <div className="text-2xl font-bold">{config.appName}</div>
-          <div className="text-sm font-medium text-gray-600 dark:text-slate-400">讓文字更精準，表達更清晰</div>
+          <div className="text-sm font-medium text-gray-600 dark:text-gray-300">讓文字更精準，表達更清晰</div>
         </div>
       </div>
       <nav className="hidden md:flex items-center gap-8">
-        <Link to="/" className="text-sm font-medium leading-normal text-gray-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-cyan-400 transition-colors">首頁</Link>
-        <a className="text-sm font-medium leading-normal text-gray-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-cyan-400 transition-colors" href="#">功能</a>
-        <a className="text-sm font-medium leading-normal text-gray-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-cyan-400 transition-colors" href="#">定價</a>
+        <Link to="/" className="text-sm font-medium leading-normal text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-cyan-400 transition-colors">首頁</Link>
+        <a className="text-sm font-medium leading-normal text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-cyan-400 transition-colors" href="#">功能</a>
+        <a className="text-sm font-medium leading-normal text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-cyan-400 transition-colors" href="#">定價</a>
         {user && (
-          <Link to="/dashboard" className="text-sm font-medium leading-normal text-gray-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-cyan-400 transition-colors">使用量</Link>
+          <Link to="/dashboard" className="text-sm font-medium leading-normal text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-cyan-400 transition-colors">使用量</Link>
         )}
       </nav>
       <div className="flex items-center gap-4">
