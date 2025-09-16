@@ -1,4 +1,4 @@
-@import "tailwindcss" theme(reference);
+@reference "tailwindcss";
 @import "tailwindcss/utilities" layer(utilities);
 
 /* Tailwind v4 Dark Mode Configuration */
