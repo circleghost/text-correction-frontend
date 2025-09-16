@@ -7,6 +7,10 @@ import { config } from '@/utils/config';
 const DashboardNavbar: React.FC = () => {
   const { user, signOut } = useAuth();
   const { theme, toggleTheme } = useTheme();
+  const isDark = theme === 'dark';
+  const navBgClass = isDark
+    ? 'bg-gray-900 border-gray-800'
+    : 'bg-white border-gray-200';
 
   const getUserDisplayName = () => {
     return user?.user_metadata?.full_name || 
@@ -33,7 +37,7 @@ const DashboardNavbar: React.FC = () => {
   };
 
   return (
-    <nav className="relative z-20 bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
+    <nav className={`relative z-20 shadow-sm border-b transition-colors duration-300 ${navBgClass}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Left side - Logo and Navigation */}

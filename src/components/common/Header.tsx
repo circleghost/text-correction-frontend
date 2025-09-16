@@ -12,18 +12,37 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
   const { user, loading } = useAuth();
   const { theme, toggleTheme } = useTheme();
+  const isDark = theme === 'dark';
+  // Match dark-mode page background (techno-theme --background-dark: #0d1117)
+  const headerBgClass = isDark
+    ? 'circuit-board-bar border-[#1a2a3a]'
+    : 'bg-white border-gray-200';
+
+  // Inline fallback to guarantee dark patterned background even if CSS order changes
+  const darkHeaderStyle = isDark
+    ? {
+        background:
+          'linear-gradient(135deg, rgba(0, 0, 0, 0.6) 0%, transparent 50%, rgba(0, 0, 0, 0.6) 100%),\
+           linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),\
+           linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),\
+           #0d1117',
+        backgroundSize: '100% 100%, 40px 40px, 40px 40px, 100% 100%',
+        backgroundPosition: '0 0, 0 0, 0 0, 0 0',
+      } as React.CSSProperties
+    : undefined;
 
   return (
     <header 
-      className={`flex items-center justify-between whitespace-nowrap border-b border-solid border-gray-200 dark:border-gray-800 px-10 py-4 bg-white dark:bg-gray-950 transition-colors duration-300 ${className}`}
+      className={`flex items-center justify-between whitespace-nowrap border-b border-solid px-10 py-4 ${headerBgClass} transition-colors duration-300 ${className}`}
+      style={darkHeaderStyle}
     >
-      <div className="flex items-center gap-3 text-2xl font-bold text-gray-800 dark:text-white">
+      <div className="flex items-center gap-3">
         <svg className="h-8 w-8 text-blue-600 dark:text-cyan-400" fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
           <path clipRule="evenodd" d="M24 4H42V17.3333V30.6667H24V44H6V30.6667V17.3333H24V4Z" fill="currentColor" fillRule="evenodd"></path>
         </svg> 
         <div>
-          <div className="text-2xl font-bold">{config.appName}</div>
-          <div className="text-sm font-medium text-gray-600 dark:text-gray-300">讓文字更精準，表達更清晰</div>
+          <div className={`text-2xl font-bold ${isDark ? 'text-white glowing-text' : 'text-gray-900'}`}>{config.appName}</div>
+          <div className={`text-sm font-medium ${isDark ? 'text-white/90' : 'text-gray-600'}`}>讓文字更精準，表達更清晰</div>
         </div>
       </div>
       <nav className="hidden md:flex items-center gap-8">

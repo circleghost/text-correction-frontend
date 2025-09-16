@@ -108,6 +108,26 @@ body {
   min-height: 100vh;
 }
 
+/* 與 circuit-board 同色同紋理的導覽列背景（不佔滿視窗高度、無覆蓋層與動畫）*/
+.circuit-board-bar {
+  /* 依序堆疊：覆蓋漸層、網格橫線、網格直線、深色背景 */
+  background:
+    linear-gradient(135deg, rgba(0, 0, 0, 0.6) 0%, transparent 50%, rgba(0, 0, 0, 0.6) 100%),
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    var(--background-dark);
+  background-size:
+    100% 100%,
+    40px 40px,
+    40px 40px,
+    100% 100%;
+  background-position:
+    0 0,
+    0 0,
+    0 0,
+    0 0;
+}
+
 /* ===== MODERN LIGHT MODE DESIGN SYSTEM ===== */
 /* 淺色模式的電路板樣式 - GitHub/Notion 風格 */
 .light .circuit-board {
