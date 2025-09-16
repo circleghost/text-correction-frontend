@@ -26,7 +26,7 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
         </svg> 
         <div>
           <div className="text-2xl font-bold">{config.appName}</div>
-          <div className="text-sm font-medium text-gray-600 dark:text-white opacity-90 dark:opacity-100">讓文字更精準，表達更清晰</div>
+          <div className="text-sm font-medium text-gray-500 dark:text-gray-100">讓文字更精準，表達更清晰</div>
         </div>
       </div>
       <nav className="hidden md:flex items-center gap-8">

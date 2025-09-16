@@ -88,11 +88,22 @@ body {
   }
 }
 
-/* ===== LinguaCheck 簡潔背景網格 ===== */
+/* ===== 深邃科技風背景網格 ===== */
 .circuit-board {
   background: 
-    /* 深色模式背景 - 更溫和的深色 */
-    linear-gradient(135deg, #1f2937 0%, #111827 50%, #0f172a 100%);
+    /* 深邃網格線條 - 科技感十足 */
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    /* 深色背景 */
+    var(--background-dark);
+  background-size: 
+    40px 40px,
+    40px 40px,
+    100% 100%;
+  background-position: 
+    0 0,
+    0 0,
+    0 0;
   position: relative;
   min-height: 100vh;
 }
@@ -142,8 +153,8 @@ body {
   right: 0;
   bottom: 0;
   background: 
-    /* 深色模式簡潔覆蓋層 */
-    linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, transparent 50%, rgba(34, 197, 94, 0.05) 100%);
+    /* 深邃漸層覆蓋 - 增強科技感 */
+    linear-gradient(135deg, rgba(0, 0, 0, 0.6) 0%, transparent 50%, rgba(0, 0, 0, 0.6) 100%);
   pointer-events: none;
   z-index: 1;
 }
@@ -158,9 +169,32 @@ body {
   display: none;
 }
 
-/* 深色模式移除動畫背景 */
-.dark .circuit-board::after {
-  display: none;
+/* 深色模式恢復動畫背景效果 */
+.circuit-board::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 50px,
+      rgba(0, 212, 255, 0.03) 50px,
+      rgba(0, 212, 255, 0.03) 51px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 50px,
+      rgba(57, 255, 20, 0.02) 50px,
+      rgba(57, 255, 20, 0.02) 51px
+    );
+  pointer-events: none;
+  z-index: 0;
+  animation: dataStreamBackground 20s linear infinite;
 }
 
 @keyframes lightModePattern {
