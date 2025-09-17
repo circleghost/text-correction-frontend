@@ -77,14 +77,14 @@ const Dashboard: React.FC = () => {
         </div>
 
         {/* Footer Info */}
-        <div className="mt-12 text-center">
-          <div className="inline-flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
+        <div className="mt-12 pt-6 text-center border-t border-[#E7ECF0] dark:border-[#1a2a3a]">
+          <div className="inline-flex items-center space-x-2 text-sm text-[#656D76] dark:text-gray-400">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
             <span>資料每分鐘自動更新</span>
           </div>
-          <div className="mt-2 text-xs text-gray-500 dark:text-gray-500">
+          <div className="mt-2 text-xs text-[#9199A1] dark:text-gray-500">
             所有時間均為台北時間 (UTC+8)
           </div>
         </div>
