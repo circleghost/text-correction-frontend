@@ -59,7 +59,7 @@ const Profile: React.FC = () => {
   const fetchProfile = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:3001/api/v1/user/profile', {
+      const response = await fetch('/api/v1/user/profile', {
         headers: {
           'Authorization': `Bearer ${session?.access_token}`,
           'Content-Type': 'application/json'
@@ -92,7 +92,7 @@ const Profile: React.FC = () => {
       setError(null);
       setSuccessMessage(null);
 
-      const response = await fetch('http://localhost:3001/api/v1/user/profile', {
+      const response = await fetch('/api/v1/user/profile', {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${session?.access_token}`,

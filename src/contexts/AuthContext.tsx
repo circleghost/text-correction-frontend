@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react'
-import { supabase, type User, type Session } from '../config/supabase'
+import { supabase, supabaseConfigured, type User, type Session } from '../config/supabase'
 import type { AuthError } from '@supabase/supabase-js'
 
 interface AuthContextType {
@@ -34,6 +34,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
     // Get initial session
     const getInitialSession = async () => {
+      if (!supabaseConfigured) {
+        // Skip auth calls when Supabase is not configured
+        if (isMounted) setLoading(false)
+        return
+      }
       try {
         const { data: { session }, error } = await supabase.auth.getSession()
         
@@ -56,7 +61,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
     getInitialSession()
 
-    // Listen for auth changes
+    // Listen for auth changes (only when configured)
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         if (!isMounted) return
@@ -84,6 +89,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const signInWithGoogle = async () => {
     setLoading(true)
     try {
+      if (!supabaseConfigured) {
+        return { error: { message: 'Supabase 未設定：請聯絡管理員或補上環境變數' } as any }
+      }
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
@@ -106,6 +114,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const signOut = async () => {
     setLoading(true)
     try {
+      if (!supabaseConfigured) {
+        return { error: null as any }
+      }
       const { error } = await supabase.auth.signOut()
       return { error }
     } catch (error) {

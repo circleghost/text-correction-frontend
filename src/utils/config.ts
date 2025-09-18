@@ -44,7 +44,8 @@ function parseNumber(value: string | undefined, defaultValue: number): number {
 // Create configuration object from environment variables
 export const config: AppConfig = {
   // API Configuration
-  apiBaseUrl: import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api/v1',
+  // 統一走相對路徑，由代理層轉發
+  apiBaseUrl: '/api/v1',
   requestTimeout: parseNumber(import.meta.env.VITE_REQUEST_TIMEOUT, 30000),
   
   // Application Information
@@ -76,6 +77,14 @@ export function validateConfig(): { isValid: boolean; errors: string[] } {
   
   if (!config.apiBaseUrl) {
     errors.push('API base URL is required');
+  }
+  
+  // Supabase configuration must be provided at runtime
+  if (!import.meta.env.VITE_SUPABASE_URL) {
+    errors.push('VITE_SUPABASE_URL is required');
+  }
+  if (!import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY) {
+    errors.push('VITE_SUPABASE_PUBLISHABLE_KEY is required');
   }
   
   if (config.maxTextLength <= 0) {

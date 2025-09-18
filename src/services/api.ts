@@ -12,10 +12,9 @@ class APIService {
   private timeout: number;
 
   constructor() {
-    // 根據環境變量配置 API 基礎 URL
-    // 開發環境: http://localhost:3001/api/v1
-    // 生產環境: /api/v1 (由 Caddy 代理)
-    this.baseURL = import.meta.env.VITE_API_BASE_URL || '/api/v1';
+    // 使用相對路徑，交由本地開發代理與雲端反向代理轉發
+    // dev 由 vite.config.ts 的 server.proxy 處理，prod 由 Caddy/Nginx 處理
+    this.baseURL = '/api/v1';
     this.timeout = 30000; // 30 seconds
     
     console.log('🔧 API Service initialized:', {
