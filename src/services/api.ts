@@ -121,6 +121,14 @@ class APIService {
       console.log('📥 Response Data:', responseData);
       console.groupEnd();
       
+      // Notify usage widgets when relevant actions complete
+      try {
+        const usageAffecting = ['/text/correct', '/text/batch-correct'];
+        if (usageAffecting.some(p => endpoint.startsWith(p))) {
+          window.dispatchEvent(new CustomEvent('usage:changed'));
+        }
+      } catch {}
+
       return responseData;
     } catch (error) {
       const duration = Date.now() - startTime;

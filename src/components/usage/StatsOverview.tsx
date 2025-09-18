@@ -44,7 +44,8 @@ const StatsOverview: React.FC = () => {
 
   useEffect(() => {
     let cancelled = false;
-    const run = async () => {
+
+    const fetchAll = async () => {
       try {
         const [quotaRes, currentRes, trendsRes] = await Promise.allSettled([
           apiService.getQuotaStatus(),
@@ -54,15 +55,11 @@ const StatsOverview: React.FC = () => {
 
         if (cancelled) return;
 
-        if (quotaRes.status === 'fulfilled') {
-          setQuota(quotaRes.value.data as any);
-        }
-
+        if (quotaRes.status === 'fulfilled') setQuota(quotaRes.value.data as any);
         if (currentRes.status === 'fulfilled') {
           const d = currentRes.value.data;
           setDayUsage({ requests: d.dailyRequests, chars: d.dailyCharacters });
         }
-
         if (trendsRes.status === 'fulfilled') {
           const values = (trendsRes.value.data || []).map((x: any) => x.totalRequests);
           const last7 = values.slice(-7);
@@ -72,8 +69,11 @@ const StatsOverview: React.FC = () => {
         if (!cancelled) setLoading(false);
       }
     };
-    run();
-    return () => { cancelled = true; };
+
+    fetchAll();
+    const onChanged = () => fetchAll();
+    window.addEventListener('usage:changed', onChanged);
+    return () => { cancelled = true; window.removeEventListener('usage:changed', onChanged); };
   }, []);
 
   const monthlyReq = useMemo(() => quota?.find(q => q.type === 'monthly_requests'), [quota]);
@@ -129,4 +129,3 @@ const StatsOverview: React.FC = () => {
 };
 
 export default StatsOverview;
-

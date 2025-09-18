@@ -1,5 +1,5 @@
 import React from 'react';
-import { QuotaStatus, UsageHistory } from '@/components/usage';
+import { QuotaStatus } from '@/components/usage';
 import StatsOverview from '@/components/usage/StatsOverview';
 import DashboardNavbar from '@/components/dashboard/DashboardNavbar';
 import { useAuth } from '@/contexts/AuthContext';
@@ -57,10 +57,7 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
 
-        {/* Usage History - Full Width */}
-        <div className="mt-8">
-          <UsageHistory />
-        </div>
+        {/* 使用者反饋：暫不顯示歷史內容（不展示文字內容時價值有限） */}
 
         {/* Footer Info */}
         <div className="mt-12 pt-6 text-center border-t border-[#E7ECF0] dark:border-[#1a2a3a]">
