@@ -1,12 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTextCorrectionStore, useInputMethod, useInputText, useGoogleDocsUrl, useError } from '@/stores/textCorrectionStore';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface TextInputComponentProps {
   className?: string;
 }
 
 export const TextInputComponent: React.FC<TextInputComponentProps> = ({ className = '' }) => {
+  const { theme } = useTheme();
   const inputMethod = useInputMethod();
   const inputText = useInputText();
   const googleDocsUrl = useGoogleDocsUrl();
@@ -117,28 +119,51 @@ export const TextInputComponent: React.FC<TextInputComponentProps> = ({ classNam
   };
 
   return (
-    <div className={`w-full ${className}`} style={{background: 'rgba(0, 0, 0, 0.3)', backdropFilter: 'blur(10px)', padding: '0.5rem', borderRadius: '0.75rem', boxShadow: '0 0 30px rgba(0, 170, 255, 0.15)', border: '1px solid var(--secondary-color)'}}>
+    <div 
+      className={`w-full ${className}`} 
+      style={theme === 'light' ? {
+        background: '#FFFFFF',
+        backdropFilter: 'none',
+        padding: '0.5rem',
+        borderRadius: '12px',
+        boxShadow: '0 1px 3px rgba(31, 35, 40, 0.12)',
+        border: '1px solid #E7ECF0'
+      } : {
+        background: 'rgba(0, 0, 0, 0.3)',
+        backdropFilter: 'blur(8px)',
+        padding: '0.5rem',
+        borderRadius: '12px',
+        boxShadow: '0 0 24px rgba(0, 212, 255, 0.12)',
+        border: '1px solid rgba(255,255,255,0.08)'
+      }}
+    >
       {/* Input Method Toggle */}
       <div className="flex items-center mb-2 px-3 pt-2">
         <button 
           onClick={() => handleInputMethodToggle('direct')}
-          className={`flex items-center gap-2 py-2 px-3 rounded-t-lg border-b-2 text-sm font-semibold transition-all duration-300 ${
-            inputMethod === 'direct'
-              ? 'text-[var(--primary-color)]'
-              : 'text-[var(--text-secondary)] hover:text-[var(--primary-color)]'
-          }`}
-          style={inputMethod === 'direct' ? {borderBottomColor: 'var(--primary-color)', textShadow: '0 0 5px var(--primary-color)'} : {}}
+          className="flex items-center gap-2 py-2 px-3 rounded-t-lg text-sm font-semibold transition-all duration-300"
+          style={theme === 'light' ? {
+            color: inputMethod === 'direct' ? '#1F2328' : '#656D76',
+            textShadow: 'none',
+            fontWeight: inputMethod === 'direct' ? '600' : '500'
+          } : {
+            color: inputMethod === 'direct' ? 'var(--primary-color)' : 'var(--text-secondary)',
+            textShadow: inputMethod === 'direct' ? '0 0 5px var(--primary-color)' : 'none'
+          }}
         >
           貼上文字
         </button>
         <button 
           onClick={() => handleInputMethodToggle('google-docs')}
-          className={`flex items-center gap-2 py-2 px-3 rounded-t-lg border-b-2 text-sm font-semibold transition-all duration-300 ${
-            inputMethod === 'google-docs'
-              ? 'text-[var(--primary-color)]'
-              : 'text-[var(--text-secondary)] hover:text-[var(--primary-color)]'
-          }`}
-          style={inputMethod === 'google-docs' ? {borderBottomColor: 'var(--primary-color)', textShadow: '0 0 5px var(--primary-color)'} : {}}
+          className="flex items-center gap-2 py-2 px-3 rounded-t-lg text-sm font-semibold transition-all duration-300"
+          style={theme === 'light' ? {
+            color: inputMethod === 'google-docs' ? '#1F2328' : '#656D76',
+            textShadow: 'none',
+            fontWeight: inputMethod === 'google-docs' ? '600' : '500'
+          } : {
+            color: inputMethod === 'google-docs' ? 'var(--primary-color)' : 'var(--text-secondary)',
+            textShadow: inputMethod === 'google-docs' ? '0 0 5px var(--primary-color)' : 'none'
+          }}
         >
           從 Google Doc 匯入文件
         </button>
@@ -160,19 +185,45 @@ export const TextInputComponent: React.FC<TextInputComponentProps> = ({ classNam
                 onChange={handleTextChange}
                 onPaste={handlePaste}
                 className="w-full resize-y rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-opacity-50 min-h-60 p-6 transition-all duration-300" 
-                style={{
+                style={theme === 'light' ? {
+                  color: '#1F2328',
+                  backgroundColor: '#FFFFFF',
+                  border: '1px solid #D0D7DE',
+                  borderRadius: '6px',
+                  fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif',
+                  boxShadow: textError ? '0 0 0 3px rgba(207, 34, 46, 0.1)' : '0 1px 3px rgba(31, 35, 40, 0.12)',
+                  transition: 'all 0.15s ease'
+                } : {
                   color: 'var(--text-primary)',
                   backgroundColor: 'rgba(13, 17, 23, 0.8)',
                   border: '1px solid rgba(107, 114, 126, 0.5)',
                   boxShadow: textError ? '0 0 15px rgba(255, 71, 87, 0.3)' : 'none'
                 }}
+                onFocus={(e) => {
+                  if (theme === 'light') {
+                    e.target.style.borderColor = '#0969DA';
+                    e.target.style.boxShadow = '0 0 0 3px rgba(9, 105, 218, 0.1)';
+                    e.target.style.backgroundColor = '#FFFFFF';
+                  }
+                }}
+                onBlur={(e) => {
+                  if (theme === 'light') {
+                    e.target.style.borderColor = '#D0D7DE';
+                    e.target.style.boxShadow = textError ? '0 0 0 3px rgba(207, 34, 46, 0.1)' : '0 1px 3px rgba(31, 35, 40, 0.12)';
+                    e.target.style.backgroundColor = '#FFFFFF';
+                  }
+                }}
                 placeholder="在此處貼上您的中文文字..."
               />
-              <div className="absolute bottom-4 right-4 text-sm" style={{color: 'var(--text-secondary)'}}>
+              <div className="absolute bottom-4 right-4 text-sm" style={{
+                color: theme === 'light' ? '#9199A1' : 'var(--text-secondary)'
+              }}>
                 字元數: {charCount} / 5000
               </div>
               {textError && (
-                <div className="text-red-400 text-sm mt-2 px-3">
+                <div className="text-sm mt-2 px-3" style={{
+                  color: theme === 'light' ? '#CF222E' : '#ff4757'
+                }}>
                   {textError}
                 </div>
               )}
@@ -191,19 +242,45 @@ export const TextInputComponent: React.FC<TextInputComponentProps> = ({ classNam
                   onChange={handleUrlChange}
                   placeholder="https://docs.google.com/document/d/..."
                   className="w-full rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-opacity-50 h-12 px-6 transition-all duration-300" 
-                  style={{
+                  style={theme === 'light' ? {
+                    color: '#1F2328',
+                    backgroundColor: '#FFFFFF',
+                    border: '1px solid #D0D7DE',
+                    borderRadius: '6px',
+                    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif',
+                    boxShadow: urlError ? '0 0 0 3px rgba(207, 34, 46, 0.1)' : '0 1px 3px rgba(31, 35, 40, 0.12)',
+                    transition: 'all 0.15s ease'
+                  } : {
                     color: 'var(--text-primary)',
                     backgroundColor: 'rgba(13, 17, 23, 0.8)',
                     border: '1px solid rgba(107, 114, 126, 0.5)',
                     boxShadow: urlError ? '0 0 15px rgba(255, 71, 87, 0.3)' : 'none'
                   }}
+                  onFocus={(e) => {
+                    if (theme === 'light') {
+                      e.target.style.borderColor = '#0969DA';
+                      e.target.style.boxShadow = '0 0 0 3px rgba(9, 105, 218, 0.1)';
+                      e.target.style.backgroundColor = '#FFFFFF';
+                    }
+                  }}
+                  onBlur={(e) => {
+                    if (theme === 'light') {
+                      e.target.style.borderColor = '#D0D7DE';
+                      e.target.style.boxShadow = urlError ? '0 0 0 3px rgba(207, 34, 46, 0.1)' : '0 1px 3px rgba(31, 35, 40, 0.12)';
+                      e.target.style.backgroundColor = '#FFFFFF';
+                    }
+                  }}
                 />
                 {urlError && (
-                  <div className="text-red-400 text-sm mt-2 px-3">
+                  <div className="text-sm mt-2 px-3" style={{
+                    color: theme === 'light' ? '#CF222E' : '#ff4757'
+                  }}>
                     {urlError}
                   </div>
                 )}
-                <div className="text-sm mt-2 px-3" style={{color: 'var(--text-secondary)'}}>
+                <div className="text-sm mt-2 px-3" style={{
+                  color: theme === 'light' ? '#656D76' : 'var(--text-secondary)'
+                }}>
                   請確保文檔已設定為「知道連結的人都能查看」
                 </div>
               </motion.div>

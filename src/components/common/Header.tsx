@@ -32,11 +32,8 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
         </div>
       </div>
       <nav className="hidden md:flex items-center gap-8">
-        <Link to="/" className="text-sm font-medium leading-normal text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-cyan-400 transition-colors">首頁</Link>
-        <a className="text-sm font-medium leading-normal text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-cyan-400 transition-colors" href="#">功能</a>
-        <a className="text-sm font-medium leading-normal text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-cyan-400 transition-colors" href="#">定價</a>
         {user && (
-          <Link to="/dashboard" className="text-sm font-medium leading-normal text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-cyan-400 transition-colors">使用量</Link>
+          <Link to="/dashboard" className="text-sm font-medium leading-normal text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-cyan-400 transition-colors">使用量統計</Link>
         )}
       </nav>
       <div className="flex items-center gap-4">

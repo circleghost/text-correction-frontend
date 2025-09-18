@@ -111,15 +111,9 @@ export const Footer: React.FC<FooterProps> = ({ className = '' }) => {
 
         {/* Bottom Bar */}
         <div className={`mt-8 pt-6 border-t ${isDark ? 'border-[#1a2a3a]' : 'border-[#E7ECF0]'}`}>
-          <div className='flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0'>
-            <div className={`text-xs ${isDark ? 'text-neutral-500' : 'text-[#656D76]'}`}>
-              © {currentYear} AI 錯字檢查. 版權所有.
-            </div>
-            
-            <div className={`flex items-center space-x-4 text-xs ${isDark ? 'text-neutral-500' : 'text-[#9199A1]'}`}>
-              <span>Powered by OpenAI</span>
-              <span>•</span>
-              <span>Built with React & TypeScript</span>
+          <div className='flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0'>
+            <div className={`text-xs ${isDark ? 'text-neutral-400' : 'text-[#656D76]'}`}>
+              是元魁做的，版權歸 Ordilux 所有。© {currentYear}
             </div>
           </div>
         </div>
