@@ -1,6 +1,6 @@
 import React from 'react';
-import { QuotaStatus, UsageStats, UsageHistory } from '@/components/usage';
-import UsageTrendsChart from '@/components/usage/UsageTrendsChart';
+import { QuotaStatus, UsageHistory } from '@/components/usage';
+import StatsOverview from '@/components/usage/StatsOverview';
 import DashboardNavbar from '@/components/dashboard/DashboardNavbar';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -47,27 +47,13 @@ const Dashboard: React.FC = () => {
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4 py-8 max-w-7xl">
 
-        {/* Dashboard Grid */}
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
-          {/* Left Column - Stats and Quota */}
-          <div className="xl:col-span-2 space-y-8">
-            {/* Usage Statistics */}
-            <div>
-              <UsageStats />
-            </div>
+        {/* Overview cards */}
+        <div className="space-y-8">
+          <StatsOverview />
 
-            {/* Usage Trends Chart */}
-            <div>
-              <UsageTrendsChart />
-            </div>
-          </div>
-
-          {/* Right Column - Quota Status */}
-          <div className="space-y-8">
-            {/* Quota Status */}
-            <div>
-              <QuotaStatus />
-            </div>
+          {/* Quota Status (detailed) */}
+          <div>
+            <QuotaStatus />
           </div>
         </div>
 
