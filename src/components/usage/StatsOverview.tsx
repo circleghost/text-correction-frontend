@@ -39,6 +39,7 @@ const Sparkline: React.FC<{ values: number[] }> = ({ values }) => {
 const StatsOverview: React.FC = () => {
   const [quota, setQuota] = useState<QuotaItem[] | null>(null);
   const [dayUsage, setDayUsage] = useState<{ requests: number; chars: number } | null>(null);
+  const [monthUsage, setMonthUsage] = useState<{ requests: number; chars: number } | null>(null);
   const [trend, setTrend] = useState<number[] | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -47,18 +48,23 @@ const StatsOverview: React.FC = () => {
 
     const fetchAll = async () => {
       try {
-        const [quotaRes, currentRes, trendsRes] = await Promise.allSettled([
+        const [quotaRes, currentDayRes, currentMonthRes, trendsRes] = await Promise.allSettled([
           apiService.getQuotaStatus(),
           apiService.getCurrentUsage('day'),
+          apiService.getCurrentUsage('month'),
           apiService.getUsageTrends('month', 'day'),
         ]);
 
         if (cancelled) return;
 
         if (quotaRes.status === 'fulfilled') setQuota(quotaRes.value.data as any);
-        if (currentRes.status === 'fulfilled') {
-          const d = currentRes.value.data;
+        if (currentDayRes.status === 'fulfilled') {
+          const d = currentDayRes.value.data;
           setDayUsage({ requests: d.dailyRequests, chars: d.dailyCharacters });
+        }
+        if (currentMonthRes.status === 'fulfilled') {
+          const m = currentMonthRes.value.data;
+          setMonthUsage({ requests: m.monthlyRequests, chars: m.monthlyCharacters });
         }
         if (trendsRes.status === 'fulfilled') {
           const values = (trendsRes.value.data || []).map((x: any) => x.totalRequests);
@@ -87,14 +93,14 @@ const StatsOverview: React.FC = () => {
         ) : (
           <div>
             <div className="text-2xl font-semibold text-gray-900 dark:text-white">
-              {monthlyReq ? `${monthlyReq.used}/${monthlyReq.limit} 次` : '--'}
+              {monthlyReq && monthUsage ? `${monthUsage.requests}/${monthlyReq.limit} 次` : '--'}
             </div>
             <div className="text-sm text-gray-500 dark:text-gray-400">
-              字元 {monthlyChars ? `${monthlyChars.used.toLocaleString()}/${monthlyChars.limit.toLocaleString()}` : '--'}
+              字元 {monthlyChars && monthUsage ? `${monthUsage.chars.toLocaleString()}/${monthlyChars.limit.toLocaleString()}` : '--'}
             </div>
-            {!!monthlyReq && (
+            {!!monthlyReq && monthUsage && (
               <div className="mt-3 h-2 rounded bg-gray-100 dark:bg-gray-700/50">
-                <div className="h-2 rounded bg-blue-500 dark:bg-green-500" style={{ width: `${Math.min(100, monthlyReq.percentageUsed)}%` }} />
+                <div className="h-2 rounded bg-blue-500 dark:bg-green-500" style={{ width: `${Math.min(100, (monthUsage.requests / Math.max(1, monthlyReq.limit)) * 100)}%` }} />
               </div>
             )}
           </div>

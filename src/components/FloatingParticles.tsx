@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface Particle {
   id: number;
@@ -10,6 +11,7 @@ interface Particle {
 
 export const FloatingParticles: React.FC = () => {
   const [particles, setParticles] = useState<Particle[]>([]);
+  const { theme } = useTheme();
 
   useEffect(() => {
     const generateParticles = () => {
@@ -31,6 +33,8 @@ export const FloatingParticles: React.FC = () => {
 
     generateParticles();
   }, []);
+
+  if (theme === 'light') return null;
 
   return (
     <div className="floating-particles">
