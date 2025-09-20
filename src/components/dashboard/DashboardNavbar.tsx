@@ -57,11 +57,11 @@ const DashboardNavbar: React.FC = () => {
             <div className="hidden md:flex items-center space-x-6">
               <Link 
                 to="/" 
-                className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-green-400 transition-colors"
+                className="text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-white/80 dark:hover:text-white transition-colors"
               >
                 返回首頁
               </Link>
-              <span className="text-sm font-medium text-blue-600 dark:text-green-400">
+              <span className="text-sm font-semibold text-blue-600 dark:text-white">
                 使用量統計
               </span>
             </div>
@@ -72,16 +72,17 @@ const DashboardNavbar: React.FC = () => {
             {/* Theme Toggle */}
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-200"
+              className="p-2 rounded-full ring-1 ring-gray-300/60 dark:ring-white/20 bg-white/80 dark:bg-white/10 hover:bg-white dark:hover:bg-white/20 transition-colors"
               title={theme === 'light' ? '切換到深色模式' : '切換到淺色模式'}
+              aria-label="切換主題"
             >
               {theme === 'light' ? (
-                <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                <svg className="w-4 h-4 text-gray-700" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M21.64 13a9 9 0 11-10.63-10.63 1 1 0 00-1.26 1.26A7 7 0 1019.74 14.9a1 1 0 001.9-.51z" />
                 </svg>
               ) : (
-                <svg className="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                <svg className="w-4 h-4 text-yellow-400" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2a1 1 0 011 1v2a1 1 0 11-2 0V3a1 1 0 011-1zm0 15a5 5 0 110-10 5 5 0 010 10zm9-4a1 1 0 100-2h-2a1 1 0 100 2h2zM5 12a1 1 0 10-1 1H2a1 1 0 100-2h2a1 1 0 001 1zm13.66 6.66a1 1 0 00-1.41 0l-1.42 1.42a1 1 0 001.41 1.41l1.42-1.41a1 1 0 000-1.42zM6.76 5.05a1 1 0 00-1.41 0L3.93 6.47a1 1 0 101.41 1.41l1.42-1.41a1 1 0 000-1.42zm0 13.9L5.34 20.37a1 1 0 101.41 1.41l1.42-1.41a1 1 0 10-1.41-1.41zM18.66 4.34l-1.42 1.41a1 1 0 001.41 1.41l1.42-1.41a1 1 0 10-1.41-1.41z" />
                 </svg>
               )}
             </button>
