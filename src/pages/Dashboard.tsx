@@ -1,11 +1,21 @@
 import React from 'react';
 import { QuotaStatus } from '@/components/usage';
 import StatsOverview from '@/components/usage/StatsOverview';
-import DashboardNavbar from '@/components/dashboard/DashboardNavbar';
+import { Header } from '@/components/common';
+import { useTheme } from '@/contexts/ThemeContext';
 import { useAuth } from '@/contexts/AuthContext';
 
 const Dashboard: React.FC = () => {
   const { user, loading: authLoading } = useAuth();
+  const { theme, setTheme } = useTheme();
+
+  // Force light mode on dashboard and restore when leaving
+  React.useEffect(() => {
+    const prev = theme;
+    if (prev !== 'light') setTheme('light');
+    return () => setTheme(prev);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (authLoading) {
     return (
@@ -36,9 +46,9 @@ const Dashboard: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
-      {/* Dashboard Navbar */}
-      <DashboardNavbar />
+    <div className="min-h-screen bg-white transition-colors duration-300">
+      {/* Unified Header (light mode) */}
+      <Header className="bg-white border-gray-200" />
       
       {/* Background Effects */}
       <div className="fixed inset-0 bg-gradient-to-br from-blue-50/50 via-white to-purple-50/50 dark:from-green-900/20 dark:via-gray-900 dark:to-cyan-900/20 -z-10"></div>

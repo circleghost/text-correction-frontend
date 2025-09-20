@@ -453,9 +453,7 @@ const Home: React.FC = () => {
                         <span style={{color: theme === 'light' ? '#111215' : 'var(--text-secondary)'}}>分析完成！以下展示校正結果</span>
                       </h3>
                       <div className="flex gap-3">
-                        <ScanButton
-                          variant="secondary"
-                          size="sm"
+                        <button
                           onClick={() => {
                             const correctedText = paragraphs
                               .filter(p => p.status === 'completed')
@@ -464,27 +462,23 @@ const Home: React.FC = () => {
                             navigator.clipboard.writeText(correctedText);
                             console.log('📋 Copied corrected text to clipboard');
                           }}
+                          className="inline-flex items-center gap-2 rounded-lg border border-[#D0D7DE] bg-white text-[#1F2328] hover:bg-[#F6F8FA] px-3 py-2 text-sm"
                         >
-                          <>
-                            <svg className="w-4 h-4 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                              <path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z" />
-                              <path d="M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2V5a2 2 0 00-2-2v8z" />
-                            </svg>
-                            <span>複製結果</span>
-                          </>
-                        </ScanButton>
-                        <ScanButton
-                          variant="primary"
-                          size="sm"
+                          <svg className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z" />
+                            <path d="M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2V5a2 2 0 00-2-2v8z" />
+                          </svg>
+                          <span>複製結果</span>
+                        </button>
+                        <button
                           onClick={() => setShowDifferences(!showDifferences)}
+                          className="inline-flex items-center gap-2 rounded-lg bg-[#111215] text-white hover:brightness-110 px-3 py-2 text-sm"
                         >
-                          <>
-                            <svg className="w-4 h-4 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                              <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd" />
-                            </svg>
-                            <span>{showDifferences ? '隱藏差異' : '顯示差異'}</span>
-                          </>
-                        </ScanButton>
+                          <svg className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
+                            <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd" />
+                          </svg>
+                          <span>{showDifferences ? '隱藏差異' : '顯示差異'}</span>
+                        </button>
                       </div>
                     </div>
                   </div>
