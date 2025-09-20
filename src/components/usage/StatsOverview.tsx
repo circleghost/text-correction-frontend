@@ -22,6 +22,11 @@ const Card: React.FC<{ title: string; children: React.ReactNode }> = ({ title, c
 const Sparkline: React.FC<{ values: number[] }> = ({ values }) => {
   const width = 160;
   const height = 38;
+  if (!values || values.length === 0) {
+    return (
+      <div className="text-xs text-gray-500 dark:text-gray-400">尚無資料</div>
+    );
+  }
   const max = Math.max(1, ...values);
   const points = values.map((v, i) => {
     const x = (i / Math.max(1, values.length - 1)) * width;

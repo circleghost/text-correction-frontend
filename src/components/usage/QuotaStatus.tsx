@@ -67,11 +67,33 @@ const QuotaStatus: React.FC = () => {
   const fetchQuotaStatus = async () => {
     try {
       setLoading(true);
-      const response = await apiService.getQuotaStatus();
-      setQuotas(response.data.map(quota => ({
-        ...quota,
-        resetDate: new Date(quota.resetDate)
-      })));
+      const [quotaRes, dayRes, monthRes] = await Promise.allSettled([
+        apiService.getQuotaStatus(),
+        apiService.getCurrentUsage('day'),
+        apiService.getCurrentUsage('month'),
+      ]);
+
+      if (quotaRes.status !== 'fulfilled') throw quotaRes.reason;
+
+      let mapped = quotaRes.value.data.map(q => ({
+        ...q,
+        resetDate: new Date(q.resetDate)
+      })) as QuotaInfo[];
+
+      // 如果配額 API 沒有提供已用值，則以 /usage/current 推估已用
+      const day = dayRes.status === 'fulfilled' ? dayRes.value.data : null;
+      const month = monthRes.status === 'fulfilled' ? monthRes.value.data : null;
+
+      mapped = mapped.map((q) => {
+        let used = q.used;
+        if (q.type === 'daily_requests' && day) used = day.dailyRequests ?? used;
+        if (q.type === 'monthly_requests' && month) used = month.monthlyRequests ?? used;
+        if (q.type === 'monthly_characters' && month) used = month.monthlyCharacters ?? used;
+        const percentageUsed = q.limit > 0 ? Math.min(100, (used / q.limit) * 100) : 0;
+        return { ...q, used, percentageUsed } as QuotaInfo;
+      });
+
+      setQuotas(mapped);
       setError(null);
     } catch (err) {
       console.error('Failed to fetch quota status:', err);
