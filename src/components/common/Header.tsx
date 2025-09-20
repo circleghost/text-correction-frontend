@@ -33,7 +33,12 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
       </div>
       <nav className="hidden md:flex items-center gap-8">
         {user && (
-          <Link to="/dashboard" className="text-sm font-medium leading-normal text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-cyan-400 transition-colors">使用量統計</Link>
+          <Link
+            to="/dashboard"
+            className="text-sm font-medium leading-normal text-gray-700 hover:text-blue-600 dark:text-white/80 dark:hover:text-white transition-colors"
+          >
+            使用量統計
+          </Link>
         )}
       </nav>
       <div className="flex items-center gap-4">

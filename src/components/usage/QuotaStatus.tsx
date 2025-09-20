@@ -89,6 +89,7 @@ const QuotaStatus: React.FC = () => {
         if (q.type === 'daily_requests' && day) used = day.dailyRequests ?? used;
         if (q.type === 'monthly_requests' && month) used = month.monthlyRequests ?? used;
         if (q.type === 'monthly_characters' && month) used = month.monthlyCharacters ?? used;
+        if (q.type === 'monthly_corrections' && month) used = month.monthlyRequests ?? used;
         const percentageUsed = q.limit > 0 ? Math.min(100, (used / q.limit) * 100) : 0;
         return { ...q, used, percentageUsed } as QuotaInfo;
       });
