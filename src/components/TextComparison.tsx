@@ -2,6 +2,7 @@ import React, { useState, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import CountUp from 'react-countup';
 import { createTextDiff, getWordDiff, createInlineDiff, getDiffStats, type DiffResult } from '@/utils/diffUtils';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface TextComparisonProps {
   originalText: string;
@@ -20,6 +21,7 @@ export const TextComparison: React.FC<TextComparisonProps> = ({
   onCopy,
   showDifferences = false
 }) => {
+  const { theme } = useTheme();
   const [diffGranularity] = useState<DiffGranularity>('character');
 
   // Calculate diffs based on granularity
@@ -36,6 +38,49 @@ export const TextComparison: React.FC<TextComparisonProps> = ({
   const stats = useMemo(() => {
     return getDiffStats(sideBySideDiff);
   }, [sideBySideDiff]);
+
+  // Theme-aware color configurations
+  const getDiffColors = (diffType: string) => {
+    if (theme === 'light') {
+      switch (diffType) {
+        case 'insert':
+          return 'bg-green-50 text-green-800 border border-green-200';
+        case 'delete':
+          return 'bg-red-50 text-red-800 line-through border border-red-200';
+        case 'equal':
+          return 'text-gray-700';
+        default:
+          return '';
+      }
+    } else {
+      switch (diffType) {
+        case 'insert':
+          return 'bg-green-900/30 text-green-400';
+        case 'delete':
+          return 'bg-red-900/30 text-red-400 line-through';
+        case 'equal':
+          return 'bg-gray-800/30 text-gray-200';
+        default:
+          return '';
+      }
+    }
+  };
+
+  const getStatsColors = () => {
+    if (theme === 'light') {
+      return {
+        insertions: 'bg-green-50 text-green-700 border border-green-200',
+        deletions: 'bg-red-50 text-red-700 border border-red-200', 
+        changes: 'bg-blue-50 text-blue-700 border border-blue-200'
+      };
+    } else {
+      return {
+        insertions: 'bg-green-900/30 text-green-300',
+        deletions: 'bg-red-900/30 text-red-300',
+        changes: 'bg-blue-900/30 text-blue-300'
+      };
+    }
+  };
 
 
   const handleCopyCorrected = useCallback(() => {
@@ -63,21 +108,21 @@ export const TextComparison: React.FC<TextComparisonProps> = ({
       switch (diff.type) {
         case 'insert':
           className = 'text-diff-added';
-          bgColor = 'bg-green-900/30 text-green-400';
+          bgColor = getDiffColors('insert');
           break;
         case 'delete':
           // Don't render deleted text in corrected-only mode
           return null;
         case 'equal':
           className = 'text-diff-unchanged';
-          bgColor = 'bg-gray-800/30 text-gray-200';
+          bgColor = getDiffColors('equal');
           break;
       }
 
       return (
         <span
           key={`corrected-${index}`}
-          className={`${className} ${bgColor} rounded`}
+          className={`${className} ${bgColor} rounded px-1 py-0.5`}
           data-type={diff.type}
         >
           {renderTextWithLineBreaks(diff.text)}
@@ -95,22 +140,22 @@ export const TextComparison: React.FC<TextComparisonProps> = ({
       switch (diff.type) {
         case 'insert':
           className = 'text-diff-added';
-          bgColor = 'bg-green-900/30 text-green-400';
+          bgColor = getDiffColors('insert');
           break;
         case 'delete':
           className = 'text-diff-removed';
-          bgColor = 'bg-red-900/30 text-red-400 line-through';
+          bgColor = getDiffColors('delete');
           break;
         case 'equal':
           className = 'text-diff-unchanged';
-          bgColor = 'bg-gray-800/30 text-gray-200';
+          bgColor = getDiffColors('equal');
           break;
       }
 
       return (
         <span
           key={`inline-${index}`}
-          className={`${className} ${bgColor} rounded`}
+          className={`${className} ${bgColor} rounded px-1 py-0.5`}
           data-type={diff.type}
         >
           {renderTextWithLineBreaks(diff.text)}
@@ -130,40 +175,47 @@ export const TextComparison: React.FC<TextComparisonProps> = ({
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
           transition={{ duration: 0.2 }}
-          className="bg-gray-900/20 backdrop-blur-sm border border-gray-700/50 rounded-lg p-4"
+          className={theme === 'light' 
+            ? 'bg-white border border-gray-200 rounded-lg p-4 shadow-sm' 
+            : 'bg-gray-900/20 backdrop-blur-sm border border-gray-700/50 rounded-lg p-4'
+          }
         >
           <div className="flex items-center justify-between mb-3">
-            <h4 className="text-sm font-medium text-gray-300">
+            <h4 className={`text-sm font-medium ${theme === 'light' ? 'text-gray-900' : 'text-gray-300'}`}>
               {showDifferences ? '差異對比' : '修正結果'}
             </h4>
             <button
               onClick={handleCopyCorrected}
-              className="px-2 py-1 text-xs text-gray-400 hover:text-gray-300 transition-colors flex items-center whitespace-nowrap"
+              className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs shadow-sm transition-colors whitespace-nowrap ${
+                theme === 'light'
+                  ? 'border border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
+                  : 'border border-gray-600 bg-white/10 text-gray-200 hover:bg-white/20'
+              }`}
               title="複製修正文字"
             >
-              <svg className="w-3 h-3 mr-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z" />
                 <path d="M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2V5a2 2 0 00-2-2v8z" />
               </svg>
               <span>複製結果</span>
             </button>
           </div>
-          <div className="text-base leading-relaxed text-gray-200">
+          <div className={`text-base leading-relaxed ${theme === 'light' ? 'text-gray-800' : 'text-gray-200'}`}>
             {showDifferences ? renderInlineDiff(inlineDiff) : renderCorrectedOnly()}
           </div>
         </motion.div>
       </AnimatePresence>
       
       {/* Statistics Row - Now at Bottom */}
-      <div className="mt-6 pt-4 border-t border-gray-700/50">
-        <div className="flex items-center justify-center gap-4">
-          <span className="px-3 py-1 bg-green-900/30 text-green-300 rounded text-sm font-medium">
+      <div className={`mt-6 pt-4 border-t ${theme === 'light' ? 'border-gray-200' : 'border-gray-700/50'}`}>
+        <div className="flex items-center justify-center gap-2">
+          <span className={`px-2.5 py-1 ${getStatsColors().insertions} rounded-full text-xs font-medium`}>
             新增 <CountUp end={stats.insertions} duration={1.5} /> 處
           </span>
-          <span className="px-3 py-1 bg-red-900/30 text-red-300 rounded text-sm font-medium">
+          <span className={`px-2.5 py-1 ${getStatsColors().deletions} rounded-full text-xs font-medium`}>
             移除 <CountUp end={stats.deletions} duration={1.5} /> 處
           </span>
-          <span className="px-3 py-1 bg-blue-900/30 text-blue-300 rounded text-sm font-medium">
+          <span className={`px-2.5 py-1 ${getStatsColors().changes} rounded-full text-xs font-medium`}>
             總修正 <CountUp end={stats.changes} duration={1.5} /> 處
           </span>
         </div>
